@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login - SymptomWise{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/form-validation.js' %}"></script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Clean white background */
+    body {
+        background: white;
+    }
+    
+    main {
+        background: white;
+        min-height: calc(100vh - 200px);
+    }
+    
+    .login-card {
+        background: white;
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+    
+    .login-header {
+        background: white;
+        padding: 2rem 2rem 1rem;
+        text-align: center;
+        border-bottom: 1px solid #f8f9fa;
+    }
+    
+    .login-header i {
+        color: #333;
+        margin-bottom: 1rem;
+    }
+    
+    .login-header h3 {
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .login-header p {
+        color: #6c757d;
+        margin-bottom: 0;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        background: white;
+    }
+    
+    .form-control:focus {
+        border-color: #333;
+        box-shadow: 0 0 0 0.2rem rgba(51, 51, 51, 0.1);
+        background: white;
+    }
+    
+    .input-group-text {
+        background: white;
+        border: 2px solid #e9ecef;
+        border-right: none;
+        color: #6c757d;
+    }
+    
+    .input-group .form-control {
+        border-left: none;
+    }
+    
+    .input-group:focus-within .input-group-text {
+        border-color: #333;
+    }
+    
+    .input-group:focus-within .form-control {
+        border-color: #333;
+    }
+    
+    .btn-login {
+        background: #333;
+        border: 2px solid #333;
+        color: white;
+        padding: 12px 24px;
+        font-weight: 500;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-login:hover {
+        background: #555;
+        border-color: #555;
+        color: white;
+        transform: translateY(-1px);
+    }
+    
+    .login-links a {
+        color: #333;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .login-links a:hover {
+        color: #555;
+        text-decoration: underline;
+    }
+    
+    .guest-access {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+    
+    .guest-access .btn {
+        border: 1px solid #e9ecef;
+        color: #333;
+        background: white;
+        border-radius: 6px;
+        padding: 8px 16px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+    
+    .guest-access .btn:hover {
+        background: #f8f9fa;
+        border-color: #ddd;
+        color: #333;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="login-card">
+                <div class="login-header">
+                    <i class="fas fa-sign-in-alt fa-3x"></i>
+                    <h3>Welcome Back</h3>
+                    <p>Sign in to your SymptomWise account</p>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label fw-medium">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <input type="text" name="username" class="form-control" placeholder="Enter your username" required 
+                                       pattern="^[a-zA-Z][a-zA-Z0-9_-]*$" 
+                                       title="Username must start with a letter and contain only letters, numbers, underscore, and hyphen">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-medium">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-login w-100 mb-3">
+                            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                        </button>
+                    </form>
+                    
+                    <div class="text-center login-links">
+                        <p class="mb-2">
+                            <a href="{% url 'password_reset' %}">Forgot your password?</a>
+                        </p>
+                        <p class="mb-2">
+                            Don't have an account? 
+                            <a href="{% url 'register' %}">Register here</a>
+                        </p>
+                        <p class="mb-3">
+                            <small>
+                                Admin? <a href="{% url 'adminlogin' %}">Admin Login</a> | 
+                                <a href="/accounts/google/login/">Google Sign-In</a>
+                            </small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Access -->
+            <div class="guest-access text-center">
+                <p class="text-muted mb-3 fw-medium">Continue as Guest</p>
+                <div class="d-flex gap-2 justify-content-center flex-wrap">
+                    <a href="/chatbot/" class="btn">
+                        <i class="fas fa-robot me-1"></i>AI Assistant
+                    </a>
+                    <a href="/hospitals/" class="btn">
+                        <i class="fas fa-hospital me-1"></i>Find Hospitals
+                    </a>
+                    <a href="{% url 'appointment' %}" class="btn">
+                        <i class="fas fa-calendar-check me-1"></i>Book Appointment
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

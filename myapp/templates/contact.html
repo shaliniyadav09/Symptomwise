@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Contact Us - SymptomWise{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="text-primary mb-3">
+            <i class="fas fa-phone me-2"></i>Contact Us
+        </h1>
+        <p class="lead text-muted">Get in touch with our healthcare team</p>
+    </div>
+
+    <div class="row">
+        <!-- Contact Information -->
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h4 class="text-primary mb-4">Get In Touch</h4>
+                    
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                             <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; background-color: #212C3F !important;">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">Phone</h6>
+                                <p class="mb-0 text-muted">+91 7007292406</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; background-color: #212C3F !important;">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">Email</h6>
+                                <p class="mb-0 text-muted">symptomwiseprivatelimited@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; background-color: #212C3F !important;">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">Address</h6>
+                                <p class="mb-0 text-muted">Gorakhpur<br>Uttar Pradesh</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-center">
+                            <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="fas fa-ambulance"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">Emergency</h6>
+                                <p class="mb-0 text-muted">Call 108 (India)<br>Available 24/7</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border-top pt-4">
+                        <h6 class="mb-3">Business Hours</h6>
+                        <div class="row">
+                            <div class="col-6">
+                                <small class="text-muted">Monday - Friday</small><br>
+                                <small>8:00 AM - 8:00 PM</small>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted">Saturday - Sunday</small><br>
+                                <small>9:00 AM - 6:00 PM</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="text-primary mb-4">Send us a Message</h4>
+                    
+                    <form method="post" data-validate="true" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">First Name <span class="text-danger">*</span></label>
+                                <input type="text" name="first_name" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                                <input type="text" name="last_name" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" name="email" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" name="phone" class="form-control" placeholder="Enter your 10-digit phone number" maxlength="10" pattern="[0-9]{10}">
+                                <div class="form-text">Optional: Enter a valid 10-digit mobile number</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Subject <span class="text-danger">*</span></label>
+                            <select name="subject" class="form-select" required>
+                                <option value="">Select a subject</option>
+                                <option value="General Inquiry">General Inquiry</option>
+                                <option value="Appointment Help">Appointment Help</option>
+                                <option value="Technical Support">Technical Support</option>
+                                <option value="Billing Question">Billing Question</option>
+                                <option value="Feedback">Feedback</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">Message <span class="text-danger">*</span></label>
+                            <textarea name="message" class="form-control" rows="5" placeholder="Please describe your inquiry..." required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-paper-plane me-2"></i>Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body text-center">
+                    <h5 class="mb-3">Need Immediate Assistance?</h5>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="{% url 'appointment' %}" class="btn btn-primary">
+                            <i class="fas fa-calendar-plus me-2"></i>Book Appointment
+                        </a>
+                        <a href="/chatbot/" class="btn btn-info">
+                            <i class="fas fa-robot me-2"></i>AI Chatbot
+                        </a>
+                        <a href="tel:108" class="btn btn-danger">
+                            <i class="fas fa-phone me-2"></i>Emergency: 108
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/form-validation.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Contact form validation initialized');
+        
+        // Add success message handling
+        const form = document.querySelector('form[data-validate="true"]');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                // The FormValidator will handle validation
+                // Additional custom validation can be added here if needed
+            });
+        }
+    });
+</script>
+{% endblock %}

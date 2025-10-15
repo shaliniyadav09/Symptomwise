@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add Category - {{ hospital.name }} - SymptomWise{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hospital-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 2rem 0;
+        margin-top: -76px;
+        padding-top: calc(2rem + 76px);
+    }
+    
+    .hospital-nav {
+        background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 1rem 0;
+        margin-bottom: 2rem;
+    }
+    
+    .hospital-nav .nav-link {
+        color: var(--primary-color);
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        margin: 0 0.25rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .hospital-nav .nav-link:hover,
+    .hospital-nav .nav-link.active {
+        background: var(--primary-color);
+        color: white;
+    }
+    
+    .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .form-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+    
+    .section-title {
+        color: var(--primary-color);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--primary-color);
+        display: inline-block;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hospital Header -->
+<div class="hospital-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="mb-2">
+                    <i class="fas fa-plus me-3"></i>Add New Category
+                </h1>
+                <p class="mb-0 opacity-90">{{ hospital.name }} - Create a new medical category/specialty</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'hospitals:categories' %}" class="btn btn-light">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Categories
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Navigation -->
+<div class="hospital-nav">
+    <div class="container">
+        <nav class="nav">
+            <a class="nav-link" href="{% url 'hospitals:dashboard' %}">
+                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+            </a>
+            <a class="nav-link" href="{% url 'hospitals:doctors' %}">
+                <i class="fas fa-user-md me-2"></i>Manage Doctors
+            </a>
+            <a class="nav-link" href="{% url 'hospitals:appointments' %}">
+                <i class="fas fa-calendar-alt me-2"></i>Appointments
+            </a>
+            <a class="nav-link active" href="{% url 'hospitals:categories' %}">
+                <i class="fas fa-tags me-2"></i>Categories
+            </a>
+            <a class="nav-link" href="{% url 'hospitals:logout' %}">
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+            </a>
+        </nav>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Category Information -->
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <i class="fas fa-tags me-2"></i>Category Information
+                            </h4>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Category Name <span class="text-danger">*</span></label>
+                                <input type="text" name="name" class="form-control" required 
+                                       placeholder="e.g., Cardiology, General Medicine, Pediatrics">
+                                <div class="form-text">Enter a unique category name for your hospital</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Medical Specialty (Optional)</label>
+                                <select name="specialty" class="form-select">
+                                    <option value="">Select a global medical specialty</option>
+                                    {% for specialty in specialties %}
+                                        <option value="{{ specialty.id }}">{{ specialty.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="form-text">Link to a global medical specialty for better categorization</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea name="description" class="form-control" rows="4" 
+                                          placeholder="Brief description of this medical category, services offered, etc."></textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Examples Section -->
+                        <div class="form-section">
+                            <h5 class="text-primary mb-3">
+                                <i class="fas fa-lightbulb me-2"></i>Common Categories
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled">
+                                        <li class="mb-1"><i class="fas fa-heart text-danger me-2"></i>Cardiology</li>
+                                        <li class="mb-1"><i class="fas fa-brain text-primary me-2"></i>Neurology</li>
+                                        <li class="mb-1"><i class="fas fa-bone text-warning me-2"></i>Orthopedics</li>
+                                        <li class="mb-1"><i class="fas fa-baby text-success me-2"></i>Pediatrics</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled">
+                                        <li class="mb-1"><i class="fas fa-eye text-info me-2"></i>Ophthalmology</li>
+                                        <li class="mb-1"><i class="fas fa-tooth text-secondary me-2"></i>Dentistry</li>
+                                        <li class="mb-1"><i class="fas fa-user-md text-primary me-2"></i>General Medicine</li>
+                                        <li class="mb-1"><i class="fas fa-female text-pink me-2"></i>Gynecology</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Buttons -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg px-5 me-3">
+                                <i class="fas fa-plus me-2"></i>Add Category
+                            </button>
+                            <a href="{% url 'hospitals:categories' %}" class="btn btn-outline-secondary btn-lg px-5">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

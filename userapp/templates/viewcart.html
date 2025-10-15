@@ -1,0 +1,62 @@
+{% extends 'userbase.html' %}
+{% load static %}
+{% block user %}
+<div class="container my-5">
+    <h1 class="mb-4 text-center">🛒 My Cart</h1>
+
+    {% if items %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>S.No</th>
+                    <th>Doctor</th>
+                    <th>Category</th>
+                    <th>Experience</th>
+                    <th>Education</th>
+                    <th>Language</th>
+                    <th>Language</th>
+                    <th>Language</th>
+                    <th>Language</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in items %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ i.book.title }}</td>
+                    <td>{{ i.book.author }}</td>
+                    <td>₹{{ i.book.price }}</td>
+                    <td>{{ i.quantity }}</td>
+                    <td>
+                        <a href="{% url 'removeitems' id=i.id %}" 
+                           class="btn btn-danger btn-sm">
+                           Remove
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                   <td colspan="4" class="text-end">
+                    <h5>Total Amount: &#8377 {{total_amount}}</h5>
+                   </td>
+                   <td colspan="4" class="text-end">
+                    <a href="{% url 'checkout' %}" class="btn btn-success">proceed to Payment</a>
+                   </td>
+
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="text-center p-5">
+        <p class="fs-5">No items in cart.</p>
+        <a href="{% url 'index' %}" class="btn btn-success">
+            Continue Browsing
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Test WhatsApp Integration</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="phone_number" class="form-label">Phone Number (with country code)</label>
+                            <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="+1234567890" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="3" required>Hello from Apollo Hospital! This is a test message.</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Test Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

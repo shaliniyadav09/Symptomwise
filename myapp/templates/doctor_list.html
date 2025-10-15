@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ doctor.full_name }} - Profile{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg border-0 rounded-4 p-4" style="background: #fdfdfd;">
+                <div class="row align-items-start">
+
+                    <div class="col-md-4 text-center">
+                        {% if doctor.profile_image and doctor.profile_image.url %}
+                            <img src="{{ doctor.profile_image.url }}" alt="{{ doctor.full_name }}" class="img-fluid rounded-3 shadow-sm" style="max-height: 350px; border: 4px solid white;">
+                        {% else %}
+                            <img src="{% static 'images/default-doctor.png' %}" alt="Default Doctor" class="img-fluid rounded-3 shadow-sm" style="max-height: 350px;">
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-8">
+                        <h2 class="fw-bold mb-2" style="color:#000453;">{{ doctor.full_name }}</h2>
+                        <p class="mb-3 text-primary fw-bold">{{ doctor.category.name|default:"Specialist" }}</p>
+
+                        <div style="font-size:16px; line-height:1.8; color:#555;">
+                            <p><strong><i class="fas fa-hospital text-muted me-2"></i>Hospital:</strong> {{ doctor.hospital.name|default:"Not specified" }}</p>
+                            <p><strong><i class="fas fa-chart-line text-muted me-2"></i>Experience:</strong> {{ doctor.experience_years|default:"N/A" }} years</p>
+                            <p><strong><i class="fas fa-language text-muted me-2"></i>Languages:</strong> {{ doctor.languages|default:"Not specified" }}</p>
+                            <p><strong><i class="fas fa-graduation-cap text-muted me-2"></i>Education:</strong> {{ doctor.education|default:"Not specified" }}</p>
+                            <p><strong><i class="fas fa-rupee-sign text-muted me-2"></i>Consultation Fee:</strong> ₹{{ doctor.consultation_fee|default:"N/A" }}</p>
+                            
+                            <hr class="my-3">
+
+                            <p><strong>About:</strong> <span style="color:#444;">{{ doctor.description|default:"No biography available." }}</span></p>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h4 class="fw-bold mb-3" style="font-size: 1.2rem;">Weekly Schedule</h4>
+                            {% if availability %}
+                                <ul class="list-group list-group-flush">
+                                    {% for slot in availability %}
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span>{{ slot.get_day_of_week_display }}</span>
+                                            <span class="fw-bold">{{ slot.start_time|time:"g:i A" }} - {{ slot.end_time|time:"g:i A" }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p class="text-muted">Schedule not available. Please contact the hospital.</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="mt-4">
+                            <a href="{% url 'appointment' %}?doctor={{ doctor.id }}" class="btn px-4 py-2 fw-semibold shadow" style="background:#000453; color:white; border-radius:8px;">
+                                <i class="fas fa-calendar-check me-2"></i> Book Appointment
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

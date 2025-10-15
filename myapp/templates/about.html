@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - SymptomWise{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="text-center mb-5">
+        <h1 class="text-primary mb-3">
+            <i class="fas fa-brain me-2"></i>About SymptomWise
+        </h1>
+        <p class="lead text-muted">AI-powered intelligent healthcare management</p>
+    </div>
+
+    <!-- Mission Section -->
+    <div class="row mb-5">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="text-primary mb-3">
+                        <i class="fas fa-bullseye me-2"></i>Our Mission
+                    </h3>
+                    <p>To revolutionize healthcare through AI-powered symptom analysis, providing intelligent insights that help patients make informed decisions and connect with the right medical care at the right time.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="text-primary mb-3">
+                        <i class="fas fa-eye me-2"></i>Our Vision
+                    </h3>
+                    <p>To become the world's leading AI-driven healthcare platform, where intelligent symptom analysis and personalized health insights empower everyone to take control of their health journey.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center text-primary mb-4">Why Choose SymptomWise?</h2>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="text-center">
+                <div class="text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: #212C3F;">
+                    <i class="fas fa-robot fa-2x"></i>
+                </div>
+                <h5>SymptomWise AI</h5>
+                <p class="text-muted">Advanced AI-powered symptom analysis and intelligent health recommendations.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="text-center">
+                <div class="text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: #60A5FA;">
+                    <i class="fas fa-network-wired fa-2x"></i>
+                </div>
+                <h5>Multi-Hospital Network</h5>
+                <p class="text-muted">Access a wide network of hospitals and healthcare providers.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="text-center">
+                <div class="text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: #212C3F;">
+                    <i class="fas fa-clock fa-2x"></i>
+                </div>
+                <h5>24/7 Support</h5>
+                <p class="text-muted">Round-the-clock support for all your healthcare needs.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="text-white rounded p-5 mb-5" style="background-color: #212C3F;">
+        <div class="row text-center">
+            <div class="col-md-3 mb-3">
+                <h2 class="mb-1">500+</h2>
+                <p class="mb-0">Patients Served</p>
+            </div>
+            <div class="col-md-3 mb-3">
+                <h2 class="mb-1">50+</h2>
+                <p class="mb-0">Partner Hospitals</p>
+            </div>
+            <div class="col-md-3 mb-3">
+                <h2 class="mb-1">100+</h2>
+                <p class="mb-0">Qualified Doctors</p>
+            </div>
+            <div class="col-md-3 mb-3">
+                <h2 class="mb-1">24/7</h2>
+                <p class="mb-0">Support Available</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="text-center">
+        <h3 class="mb-3">Ready to Get Started?</h3>
+        <p class="text-muted mb-4">Join thousands of patients who trust SymptomWise for intelligent healthcare management.</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'appointment' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-calendar-plus me-2"></i>Book Appointment
+            </a>
+            <a href="/chatbot/" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-robot me-2"></i>Try AI Chatbot
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

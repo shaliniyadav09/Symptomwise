@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static custom_filters %}
+
+{% block title %}Manage Availability - Dr. {{ doctor.first_name }} {{ doctor.last_name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Manage Weekly Availability for Dr. {{ doctor.first_name }} {{ doctor.last_name }}</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <p class="text-muted">Check the box for each day the doctor is available and set their working hours.</p>
+
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Day</th>
+                                    <th class="text-center">Available?</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for day_num, day_name in days_of_week %}
+                                    {% with current_slot=schedule|get_item:day_num %}
+                                        <tr>
+                                            <td><strong>{{ day_name }}</strong></td>
+                                            <td class="text-center">
+                                                <div class="form-check form-switch d-flex justify-content-center">
+                                                    <input class="form-check-input" type="checkbox" name="active_{{ day_num }}"
+                                                        id="active_{{ day_num }}" {% if current_slot %}checked{% endif %}>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input type="time" name="start_time_{{ day_num }}" class="form-control"
+                                                    value="{{ current_slot.start_time|default:'' }}">
+                                            </td>
+                                            <td>
+                                                <input type="time" name="end_time_{{ day_num }}" class="form-control"
+                                                    value="{{ current_slot.end_time|default:'' }}">
+                                            </td>
+                                        </tr>
+                                    {% endwith %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg px-5">
+                                <i class="fas fa-save me-2"></i>Save Schedule
+                            </button>
+                            <a href="{% url 'hospitals:doctors' %}" class="btn btn-outline-secondary btn-lg px-4">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

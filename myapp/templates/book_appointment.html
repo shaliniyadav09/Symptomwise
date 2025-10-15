@@ -1,0 +1,454 @@
+<style>
+  /* GLOBAL */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #e6ebff, #f9f9ff);
+}
+
+/* FORM CONTAINER */
+#appointmentForm {
+  max-width: 750px; /* wider to fit two columns nicely */
+  margin: 60px auto;
+  padding: 45px 40px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  color: #222;
+  animation: fadeInUp 1s ease-in-out;
+  transition: transform 0.3s ease;
+}
+
+#appointmentForm:hover {
+  transform: translateY(-5px);
+}
+
+/* HEADING */
+#appointmentForm h2 {
+  font-size: 2rem;
+  margin-bottom: 35px;
+  font-weight: 700;
+  color: #000453;
+  text-align: center;
+  letter-spacing: 1px;
+  position: relative;
+}
+
+#appointmentForm h2::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #000453, #2d3ca5);
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+/* GRID */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px 35px;
+}
+
+/* FORM GROUP */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.6s ease forwards;
+  opacity: 0;
+}
+
+.form-group:nth-child(odd) {
+  animation-delay: 0.2s;
+}
+
+.form-group:nth-child(even) {
+  animation-delay: 0.4s;
+}
+
+/* INPUTS */
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100% !important;
+  padding: 14px 16px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 15px;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #000453;
+  background-color: #fff;
+  outline: none;
+  box-shadow: 0 0 12px rgba(0, 4, 83, 0.25);
+}
+
+/* LABEL */
+#appointmentForm label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #000453;
+  font-size: 0.95rem;
+}
+
+/* SUBMIT BUTTON */
+#appointmentForm button[type="submit"] {
+  grid-column: span 2;
+  background: linear-gradient(135deg, #000453, #343f9e);
+  color: white;
+  font-weight: bold;
+  padding: 15px 25px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.4s ease;
+  box-shadow: 0 5px 14px rgba(0, 4, 83, 0.25);
+}
+
+#appointmentForm button[type="submit"]:hover {
+  background: linear-gradient(135deg, #1e2580, #000453);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 20px rgba(0, 4, 83, 0.35);
+}
+
+/* ANIMATIONS */
+@keyframes fadeInUp {
+  0% { transform: translateY(30px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideIn {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #appointmentForm {
+    max-width: 90%;
+    padding: 30px 25px;
+  }
+}
+.error-msg {
+    color: red;
+    font-size: 14px;
+    margin-top: 4px;
+    font-weight: bold;
+}
+
+.success-msg {
+    color: green;
+    font-size: 14px;
+    margin-top: 4px;
+    font-weight: bold;
+}
+
+input.invalid {
+    border: 2px solid red;
+}
+
+input.valid {
+    border: 2px solid green;
+}
+
+.shake {
+    animation: shake 0.3s;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+</style>
+
+<!-- Include the validation library -->
+{% load static %}
+<script src="{% static 'js/form-validation.js' %}"></script>
+
+<form method="POST" id="appointmentForm" data-validate="true" class="needs-validation" novalidate>
+  {% csrf_token %}
+  <h2>Book Appointment</h2>
+  <div id="errorBox" 
+     style="display:none; 
+            background:#ffe6e6; 
+            color:#b30000; 
+            border:1px solid #b30000; 
+            padding:12px; 
+            border-radius:10px; 
+            margin-bottom:20px; 
+            font-weight:600;">
+</div>
+
+
+  <div class="form-grid">
+    <div class="form-group">
+      {{ form.first_name.label_tag }}
+      {{ form.first_name }}
+    </div>
+    <div class="form-group">
+      {{ form.dob.label_tag }}
+      {{ form.dob }}
+    </div>
+
+    <div class="form-group">
+      {{ form.last_name.label_tag }}
+      {{ form.last_name }}
+    </div>
+    <div class="form-group">
+      {{ form.gender.label_tag }}
+      {{ form.gender }}
+    </div>
+
+    <div class="form-group">
+      {{ form.phone.label_tag }}
+      {{ form.phone }}
+    </div>
+    <!-- Change Appointment Date field to calendar picker -->
+<div class="form-group">
+  {{ form.appointment_date.label_tag }}
+  <input type="date" id="id_appointment_date" name="appointment_date" min="{{ today|date:'Y-m-d' }}">
+</div>
+
+<div class="form-group">
+  <div class="form-group">
+  {{ form.appointment_time.label_tag }}
+  <select id="id_appointment_time" name="appointment_time">
+    <option value="">Select time</option>
+  </select>
+</div>
+
+</div>
+
+      <div class="form-group">
+      {{ form.email.label_tag }}
+      {{ form.email }}
+    </div>
+
+    <div class="form-group">
+      {{ form.zipcode.label_tag }}
+      {{ form.zipcode }}
+    </div>
+    <div class="form-group">
+      {{ form.doctor.label_tag }}
+      {{ form.doctor }}
+    </div>
+
+    <button type="submit">Book Appointment</button>
+  </div>
+</form>
+
+<script>
+// Show error
+function showError(input, message) {
+    let error = input.parentNode.querySelector(".error-msg, .success-msg");
+    if (!error) {
+        error = document.createElement("div");
+        input.parentNode.appendChild(error);
+    }
+    error.textContent = message;
+    error.className = "error-msg";
+    input.classList.add("invalid", "shake");
+    input.classList.remove("valid");
+    setTimeout(() => input.classList.remove("shake"), 300);
+}
+
+// Show success
+function showSuccess(input, message="") {
+    let success = input.parentNode.querySelector(".error-msg, .success-msg");
+    if (!success) {
+        success = document.createElement("div");
+        input.parentNode.appendChild(success);
+    }
+    success.textContent = message;
+    success.className = "success-msg";
+    input.classList.add("valid");
+    input.classList.remove("invalid");
+}
+
+// ---- Validation Rules ----
+
+// Name
+function validateName(input) {
+    if (!/^[A-Za-z\s]+$/.test(input.value.trim())) {
+        showError(input, "Only letters allowed in name.");
+    } else {
+        showSuccess(input);
+    }
+}
+
+// DOB
+function validateDOB(input) {
+    let entered = new Date(input.value);
+    if (isNaN(entered)) {
+        showError(input, "Enter valid DOB (YYYY-MM-DD).");
+    } else {
+        showSuccess(input);
+    }
+}
+
+// Gender
+function validateGender(input) {
+    const val = input.value.trim().toLowerCase();
+    if (!["male", "female", "other"].includes(val)) {
+        showError(input, "Enter Male, Female, or Other.");
+    } else {
+        showSuccess(input);
+    }
+}
+
+// Phone
+function validatePhone(input) {
+    const phone = input.value.replace(/\D/g, '');
+    
+    if (phone.length !== 10) {
+        showError(input, "Phone must be exactly 10 digits.");
+    } else if (phone === '0000000000') {
+        showError(input, "Phone number cannot be all zeros.");
+    } else if (phone.startsWith('0')) {
+        showError(input, "Phone number should not start with 0.");
+    } else {
+        showSuccess(input);
+    }
+}
+
+// Email
+function validateEmail(input) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim())) {
+        showError(input, "Invalid email address.");
+    } else {
+        showSuccess(input);
+    }
+}
+
+// Appointment Date (must be today or future)
+document.addEventListener("DOMContentLoaded", function () {
+    const dateInput = document.getElementById("id_appointment_date");
+    let today = new Date();
+    let yyyy = today.getFullYear();
+    let mm = String(today.getMonth() + 1).padStart(2, "0");
+    let dd = String(today.getDate()).padStart(2, "0");
+    let minDate = yyyy + "-" + mm + "-" + dd;
+    dateInput.setAttribute("min", minDate);
+});
+
+// Validate Appointment Date
+function validateAppointmentDate(input) {
+    let today = new Date();
+    today.setHours(0,0,0,0); // midnight
+    let entered = new Date(input.value);
+
+    if (isNaN(entered.getTime())) {
+        showError(input, "Enter a valid date.");
+    } else if (entered < today) {
+        showError(input, "Date must be today or in the future.");
+    } else {
+        showSuccess(input);
+    }
+}
+
+// ====================== TIME SLOTS ======================
+// ====================== TIME SLOTS ======================
+const dateInput = document.getElementById("id_appointment_date");
+const timeSelect = document.getElementById("id_appointment_time");
+const doctorSelect = document.getElementById("id_doctor");
+
+// When date changes, fetch slots from DB
+dateInput.addEventListener("change", function () {
+    let date = this.value;
+    let doctor_id = doctorSelect.value;
+
+    if (date && doctor_id) {
+        fetch(`/get-available-slots/?date=${date}&doctor_id=${doctor_id}`)
+            .then(res => res.json())
+            .then(data => {
+                timeSelect.innerHTML = `<option value="">-- Select Time Slot --</option>`;
+                data.available_slots.forEach(slot => {
+                    let opt = document.createElement("option");
+                    opt.value = slot;
+                    opt.textContent = slot;
+                    timeSelect.appendChild(opt);
+                });
+
+                // if no slots left
+                if (data.available_slots.length === 0) {
+                    let opt = document.createElement("option");
+                    opt.disabled = true;
+                    opt.textContent = "No slots available";
+                    timeSelect.appendChild(opt);
+                }
+            });
+    }
+});
+
+
+// Validate Appointment Time
+function validateAppointmentTime(input) {
+    if (input.value === "") {
+        showError(input, "Please select a time slot.");
+    } else {
+        showSuccess(input);
+    }
+}
+
+
+// Zipcode (6 digits for India)
+function validateZip(input) {
+    const zipcode = input.value.replace(/\D/g, '');
+    
+    if (zipcode.length !== 6) {
+        showError(input, "Zipcode must be exactly 6 digits.");
+    } else if (zipcode === '000000') {
+        showError(input, "Zipcode cannot be all zeros.");
+    } else if (zipcode.startsWith('0')) {
+        showError(input, "Indian pincode cannot start with 0.");
+    } else {
+        showSuccess(input);
+    }
+}
+
+// Enable/disable submit
+function checkFormValidity() {
+    const form = document.getElementById("appointmentForm");
+    const inputs = form.querySelectorAll("input, select, textarea");
+    const button = form.querySelector("button[type='submit']");
+
+    let allValid = true;
+    inputs.forEach(input => {
+        if (input.classList.contains("invalid") || input.value.trim() === "") {
+            allValid = false;
+        }
+    });
+
+    button.disabled = !allValid;
+    button.style.opacity = allValid ? "1" : "0.6";
+    button.style.cursor = allValid ? "pointer" : "not-allowed";
+}
+
+// Attach events
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("id_first_name").addEventListener("input", function(){ validateName(this); checkFormValidity(); });
+    document.getElementById("id_last_name").addEventListener("input", function(){ validateName(this); checkFormValidity(); });
+    document.getElementById("id_dob").addEventListener("blur", function(){ validateDOB(this); checkFormValidity(); });
+    document.getElementById("id_gender").addEventListener("blur", function(){ validateGender(this); checkFormValidity(); });
+    document.getElementById("id_phone").addEventListener("input", function(){ validatePhone(this); checkFormValidity(); });
+    document.getElementById("id_email").addEventListener("blur", function(){ validateEmail(this); checkFormValidity(); });
+    document.getElementById("id_appointment_date").addEventListener("change", function(){ validateAppointmentDate(this); checkFormValidity(); });
+    document.getElementById("id_appointment_time").addEventListener("change", function(){ validateAppointmentTime(this); checkFormValidity(); });
+    document.getElementById("id_zipcode").addEventListener("input", function(){ validateZip(this); checkFormValidity(); });
+});
+</script>

@@ -1,0 +1,101 @@
+{% extends 'adminbase.html' %}
+{% load static %}
+{% block admin %}
+<h3 class="mb-4">EDIT Doctor -{{doctor.title}}</h3>
+<div class="row">
+    <div class="col-sm-10"> 
+        <div class="card p-4 shadow-sm">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Doctor Title -->
+                <div class="mb-3">
+                    <label for="title" class="form-label">Doctor Title</label>
+                    <input type="text" name="title" value={{doctor.title}} id="title" class="form-control" required/>
+                </div>
+                
+                <!-- Author -->
+                <div class="mb-3">
+                    <label for="auth" class="form-label">Category</label>
+                    <input type="text" name="category" id="auth" value={{doctor.category}} class="form-control" />
+                </div>
+                
+                <!-- Category -->
+                <div class="mb-3">
+                    <label for="cat" class="form-label">Select Category</label>
+                    <select name="category" id="cat" class="form-select" required>
+                        <option value="{{doctor.category.id}}" selected >{{doctor.category.name}}</option>
+                       
+                        {% for c in cats %}
+                        {% if doctor.category.id != c.id %}
+                        <option value="{{ c.id }}">{{ c.name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Description -->
+                <div class="mb-3">
+                    <label for="desc" class="form-label">Description</label>
+                    <textarea name="description" id="desc" class="form-control">{{doctor.description}}</textarea>
+                </div>
+                
+                <!-- experience -->
+                <div class="mb-3">
+                    <label for="op" class="form-label">experience</label>
+                    <input type="number" name="experience" value={{doctor.experience}} id="op" step="0.01" class="form-control" required />
+                </div>
+                
+                <!-- education -->
+                <div class="mb-3">
+                    <label for="p" class="form-label">Education</label>
+                    <input type="number" name="education" id="p" step="0.01" value={{doctor.education}} class="form-control" required />
+                </div>
+                
+                <!-- consultation_start  -->
+                <div class="mb-3">
+                    <label for="p" class="form-label">Consultation_start</label>
+                    <input type="number" name="consultation_start" id="p" step="0.01" value={{doctor.consultation_start}} class="form-control" required />
+                </div>
+
+                 <!-- consultation_end -->
+                <div class="mb-3">
+                    <label for="p" class="form-label">Consultation_end</label>
+                    <input type="number" name="consultation_end" id="p" step="0.01" value={{doctor.consultation_end}} class="form-control" required />
+                </div>
+
+                 <!-- consultation_days  -->
+                <div class="mb-3">
+                    <label for="p" class="form-label">Consultation_days</label>
+                    <input type="number" name="consultation_days" id="p" step="0.01" value={{doctor.consultation_days}} class="form-control" required />
+                </div>
+
+                 <!-- consultation_date  -->
+                <div class="mb-3">
+                    <label for="p" class="form-label">Consultation_date</label>
+                    <input type="number" name="consultation_date" id="p" step="0.01" value={{doctor.consultation_date}} class="form-control" required />
+                </div>
+                
+                <!-- Language -->
+                <div class="mb-3">
+                    <label for="lang" class="form-label">Language</label>
+                    <input type="text" name="language" id="lang" value={{doctor.language}} class="form-control" />
+                </div>
+                
+                <!-- Cover Image -->
+                <div class="mb-3">
+                    <label for="ci" class="form-label">Cover Image</label>
+                    <input type="file" name="cover_image" id="ci" class="form-control" required />
+                </div>
+                
+               
+                
+                <!-- Submit -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success px-4">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

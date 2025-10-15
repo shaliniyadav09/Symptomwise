@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Reminder - SymptomWise</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8fafc;
+        }
+        .email-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2563eb;
+            margin-bottom: 5px;
+        }
+        .tagline {
+            color: #64748b;
+            font-size: 14px;
+        }
+        .reminder-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            display: inline-block;
+            font-weight: 600;
+            margin: 20px 0;
+        }
+        .appointment-details {
+            background: #fef3c7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #f59e0b;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #fde68a;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-weight: 600;
+            color: #92400e;
+        }
+        .detail-value {
+            color: #451a03;
+            font-weight: 500;
+        }
+        .reminder-info {
+            background: #dbeafe;
+            border: 1px solid #3b82f6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .reminder-info h4 {
+            color: #1e40af;
+            margin: 0 0 10px 0;
+        }
+        .contact-info {
+            background: #e0f2fe;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .contact-info h4 {
+            color: #0369a1;
+            margin: 0 0 15px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 14px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #f59e0b;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 10px 5px;
+        }
+        .btn:hover {
+            background: #d97706;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">🧠 SymptomWise</div>
+            <div class="tagline">AI-Powered Healthcare Management</div>
+            <div class="reminder-badge">⏰ Appointment Reminder</div>
+        </div>
+
+        <!-- Greeting -->
+        <h2 style="color: #1e293b; margin-bottom: 15px;">Hello {{ patient_name }},</h2>
+        <p style="font-size: 16px; margin-bottom: 20px;">
+            This is a friendly reminder about your upcoming appointment. We look forward to seeing you soon!
+        </p>
+
+        <!-- Appointment Details -->
+        <div class="appointment-details">
+            <h3 style="color: #92400e; margin-bottom: 15px;">📋 Appointment Details</h3>
+            
+            <div class="detail-row">
+                <span class="detail-label">Appointment ID:</span>
+                <span class="detail-value">{{ appointment_id }}</span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="detail-label">Doctor:</span>
+                <span class="detail-value">{{ doctor_name }}</span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="detail-label">Hospital:</span>
+                <span class="detail-value">{{ hospital_name }}</span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">{{ appointment_date }}</span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="detail-label">Time:</span>
+                <span class="detail-value">{{ appointment_time }}</span>
+            </div>
+        </div>
+
+        <!-- Reminder Information -->
+        <div class="reminder-info">
+            <h4>📝 Please Remember</h4>
+            <ul style="margin: 0; padding-left: 20px;">
+                <li>Arrive 15 minutes before your scheduled time</li>
+                <li>Bring valid ID and previous medical records</li>
+                <li>Contact us if you need to reschedule</li>
+            </ul>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="contact-info">
+            <h4>📞 Need to Reschedule?</h4>
+            <p><strong>Email:</strong> {{ contact_email }}</p>
+            <p><strong>Phone:</strong> {{ contact_phone }}</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="#" class="btn">Confirm Attendance</a>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>SymptomWise Private Limited</strong></p>
+            <p>Your trusted AI-powered healthcare companion</p>
+        </div>
+    </div>
+</body>
+</html>

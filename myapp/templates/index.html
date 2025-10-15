@@ -1,0 +1,1239 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}SymptomWise - AI-Powered Healthcare Management{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Hero Section Styles */
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.hero .bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 1200px;
+  min-height: 600px;
+  margin: 50px auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  position: relative;
+  z-index: 1;
+  color: #334155;
+}
+
+/* Mobile-first responsive navigation */
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.mobile-nav .nav-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.mobile-nav .nav-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.desktop-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.menu-btn {
+  background: #2563eb;
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.menu-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-links a {
+  color: #1e293b;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.nav-links a:hover {
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.05);
+}
+
+.contact-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.contact-btn {
+  border: 1px solid #64748b;
+  border-radius: 8px;
+  padding: 8px 16px;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.contact-btn:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.05);
+}
+
+.tag {
+  display: inline-block;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 6px 14px;
+  margin-right: 8px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tag:hover {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+.cta-btn {
+  background: #2563eb;
+  color: white;
+  border-radius: 8px;
+  padding: 12px 24px;
+  display: inline-block;
+  font-weight: 600;
+  margin-top: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  border: none;
+  font-size: 16px;
+}
+
+.cta-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.right-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.right-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-color: #2563eb;
+}
+
+.right-card img {
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 15px;
+}
+
+.user-counter {
+  display: flex;
+  align-items: center;
+  margin-top: 25px;
+  cursor: pointer;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.user-counter:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+.user-counter img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin-right: -10px;
+  border: 2px solid #fff;
+}
+
+.footer-note {
+  font-size: 12px;
+  color: #555;
+  margin-top: 20px;
+}
+
+/* Doctor Image Fixes for Mobile */
+.doctor-card .card img {
+  transition: transform 0.3s ease;
+  border-radius: 12px;
+  object-fit: cover;
+  object-position: center top; /* Default: crop from top */
+}
+
+.doctor-card .card:hover img {
+  transform: scale(1.05);
+}
+
+/* FAQ Styles */
+.faq-section {
+  max-width: 100%;
+  margin: 60px auto;
+  padding: 10px;
+  background-color: #f4f9fb;
+  text-align: center;
+}
+
+.faq-title {
+  font-weight: bold;
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.faq-subtitle {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.accordion {
+  display: inline-block;
+  text-align: left;
+  max-width: 950px;
+  width: 100%;
+}
+
+.accordion-item {
+  border: none;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.accordion-button {
+  background: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 18px 20px;
+  border-radius: 12px;
+  box-shadow: none !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accordion-button::after {
+  flex-shrink: 0;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #2563eb;
+  content: '+';
+  font-size: 20px;
+  font-weight: bold;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.accordion-button:not(.collapsed)::after {
+  content: '-';
+  background: #2563eb;
+  color: #fff;
+  transform: rotate(180deg);
+}
+
+.accordion-body {
+  padding: 20px;
+  font-size: 16px;
+  color: #555;
+  background: #f9fcfd;
+  border-top: 1px solid #e5e5e5;
+  border-radius: 0 0 12px 12px;
+}
+
+/* Slider Styles */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  animation: floatUp 15s linear infinite;
+}
+
+@keyframes floatUp {
+  from { transform: translateY(100vh) translateX(0); opacity: 1; }
+  to { transform: translateY(-20vh) translateX(50px); opacity: 0; }
+}
+
+.sliders-wrapper {
+  background: #fff;
+  padding: 60px 0;
+  border-radius: 20px;
+  margin: 40px auto;
+  width: 100%;
+  max-width: 1400px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  z-index: 1;
+  position: relative;
+}
+
+.slider-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  margin: 25px 0;
+  z-index: 1;
+}
+
+.slider {
+  display: flex;
+  width: max-content;
+  animation: slideLeft 25s linear infinite;
+}
+
+.slider.reverse {
+  animation: slideRight 25s linear infinite;
+}
+
+.slider img {
+  height: 220px; 
+  margin: 12px;
+  border-radius: 15px;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.slider img:nth-child(1) { width: 320px !important; }
+.slider img:nth-child(2) { width: 420px !important; }
+.slider img:nth-child(3) { width: 320px !important; }
+.slider img:nth-child(4) { width: 420px !important; }
+.slider img:nth-child(5) { width: 320px !important; }
+.slider img:nth-child(6) { width: 420px !important; }
+.slider img:nth-child(7) { width: 320px !important; }
+.slider img:nth-child(8) { width: 420px !important; }
+.slider img:nth-child(9) { width: 320px !important; }
+.slider img:nth-child(10) { width: 420px !important; }
+
+.slider img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+@keyframes slideLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes slideRight {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+/* Doctors Section Styling */
+.section-title {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 3rem;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  border-radius: 2px;
+}
+
+/* Doctor Cards Styling */
+.doctor-card {
+  transition: all 0.3s ease;
+}
+
+.doctor-card .card {
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: white;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.doctor-card .card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+  border-color: #2563eb;
+}
+
+/* Doctor Image Container */
+.doctor-card .card .p-3 {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-radius: 16px 16px 0 0;
+  transition: all 0.3s ease;
+}
+
+.doctor-card .card:hover .p-3 {
+  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+}
+
+/* Doctor Info */
+.doctor-card .card-body {
+  background: white;
+  padding: 1.5rem;
+}
+
+.doctor-card .card-title {
+  color: #1e293b;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.doctor-card .specialization {
+  color: #2563eb;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.doctor-card .experience {
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 1rem;
+}
+
+/* View Profile Button */
+.doctor-card .btn {
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border: 1px solid #0077b6;
+  color: #0077b6;
+  background: transparent;
+  padding: 0.5rem 1.5rem;
+  font-size: 14px;
+}
+
+.doctor-card .btn:hover {
+  background: #0077b6;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 119, 182, 0.2);
+}
+
+.doctor-card .card:hover .btn {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.doctor-card .card:hover .btn:hover {
+  background: #2563eb;
+  color: white;
+}
+
+/* Show More Button */
+.text-center .btn-primary {
+  background: linear-gradient(135deg, #193b57, #2563eb);
+  border: none;
+  border-radius: 50px;
+  padding: 12px 30px;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(25, 59, 87, 0.2);
+}
+
+.text-center .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(25, 59, 87, 0.3);
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .glass-card {
+    padding: 20px;
+    margin: 20px 10px;
+    min-height: auto;
+  }
+  
+  /* Hide desktop nav, show mobile nav */
+  .desktop-nav {
+    display: none;
+  }
+  
+  .mobile-nav {
+    display: flex;
+  }
+  
+  /* Mobile navigation grid */
+  .mobile-nav-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .mobile-nav-grid .nav-btn {
+    padding: 10px 8px;
+    font-size: 12px;
+    text-align: center;
+  }
+  
+  /* Contact section for mobile */
+  .mobile-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .mobile-contact .contact-email {
+    font-size: 12px;
+    color: #64748b;
+    text-align: center;
+  }
+  
+  .mobile-contact .contact-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    text-align: center;
+  }
+  
+  /* Content adjustments */
+  .hero-content h1 {
+    font-size: 1.8rem;
+    line-height: 1.2;
+    margin-bottom: 15px;
+  }
+  
+  .hero-content p {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  
+  .tag {
+    font-size: 11px;
+    padding: 4px 10px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .cta-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
+  }
+  
+  .user-counter {
+    padding: 12px;
+    margin-top: 15px;
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  
+  .user-counter .user-images {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+  }
+  
+  .user-counter img {
+    width: 30px;
+    height: 30px;
+    margin-right: 0;
+  }
+  
+  .user-counter span {
+    font-size: 14px;
+    margin: 0;
+  }
+  
+  .right-card {
+    margin-top: 20px;
+    padding: 16px;
+  }
+  
+  .right-card h5 {
+    font-size: 16px;
+  }
+  
+  .right-card p {
+    font-size: 14px;
+  }
+  
+  /* Doctor cards mobile fixes */
+  .doctor-card .col-sm-6 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .doctor-card .card-body {
+    padding: 1rem;
+  }
+  
+  .doctor-card .card-title {
+    font-size: 1rem;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+  }
+  
+  /* Mobile doctor image positioning - crop from bottom instead of top */
+  .doctor-card .card img {
+    object-position: center bottom;
+  }
+  
+  /* FAQ mobile adjustments */
+  .faq-title {
+    font-size: 24px;
+  }
+  
+  .faq-subtitle {
+    font-size: 14px;
+    padding: 0 15px;
+  }
+  
+  .accordion-button {
+    font-size: 16px;
+    padding: 15px;
+  }
+  
+  .accordion-button::after {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+  }
+  
+  .accordion-body {
+    padding: 15px;
+    font-size: 14px;
+  }
+  
+  /* Slider mobile adjustments */
+  .sliders-wrapper {
+    padding: 30px 0;
+    margin: 20px 10px;
+  }
+  
+  .slider img {
+    height: 150px;
+    margin: 8px;
+  }
+  
+  .slider img:nth-child(odd) { width: 200px !important; }
+  .slider img:nth-child(even) { width: 250px !important; }
+}
+
+@media (max-width: 480px) {
+  .glass-card {
+    padding: 15px;
+    margin: 15px 5px;
+  }
+  
+  .hero-content h1 {
+    font-size: 1.5rem;
+  }
+  
+  .mobile-nav-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .mobile-nav-grid .nav-btn {
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  .tag {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+  
+  .user-counter span {
+    font-size: 12px;
+  }
+  
+  /* Very small screens - single column for doctor cards */
+  .doctor-card .col-sm-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* Grid Layout Improvements */
+.row.g-4 {
+  margin: 0 -12px;
+}
+
+.row.g-4 > [class*="col-"] {
+  padding: 12px;
+}
+
+/* Card Hover Effects Enhancement */
+.doctor-card .card {
+  position: relative;
+  z-index: 1;
+}
+
+.doctor-card .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.02), rgba(59, 130, 246, 0.02));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 16px;
+  z-index: -1;
+}
+
+.doctor-card .card:hover::before {
+  opacity: 1;
+}
+
+/* Image Loading State */
+.doctor-card .card img {
+  background: #f1f5f9;
+}
+
+.doctor-card .card img[src*="default"] {
+  filter: grayscale(0.2);
+  opacity: 0.8;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+  <!-- Background Video -->
+  <video autoplay muted loop class="bg-video">
+    <source src="{% static 'image/y.mp4' %}" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Glass Card Container -->
+  <div class="container glass-card">
+    <!-- Desktop Navigation -->
+    <div class="desktop-nav">
+      <div class="d-flex align-items-center">
+        <button class="menu-btn me-3" onclick="window.location.href='/services/'">Services</button>
+        <div class="nav-links">
+          <a href="/about/">About</a>
+          <a href="/hospitals/">Hospitals</a>
+          <a href="/appointment/">Book Now</a>
+        </div>
+      </div>
+      <div class="contact-section">
+        <span class="me-3 d-none d-lg-inline">symptomwiseprivatelimited@gmail.com</span>
+        <a href="/contact/" class="contact-btn">Contact Us</a>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav">
+      <div class="mobile-contact">
+        <div class="contact-email">symptomwiseprivatelimited@gmail.com</div>
+        <a href="/contact/" class="contact-btn">Contact Us</a>
+      </div>
+      
+      <div class="mobile-nav-grid">
+        <a href="/services/" class="nav-btn">Services</a>
+        <a href="/about/" class="nav-btn">About</a>
+        <a href="/hospitals/" class="nav-btn">Hospitals</a>
+        <a href="/appointment/" class="nav-btn">Book Now</a>
+      </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row align-items-center">
+      <!-- Left Column -->
+      <div class="col-md-7">
+        <div class="hero-content">
+          <div>
+            <span class="tag" onclick="showFeatureInfo('ai')">AI Intelligence</span>
+            <span class="tag" onclick="showFeatureInfo('security')">Security</span>
+            <span class="tag" onclick="showFeatureInfo('personalization')">Personalization</span>
+          </div>
+          <h1 class="mb-3 fw-bold">AI-POWERED HEALTHCARE SOLUTIONS</h1>
+          <p class="fst-italic mb-4">Intelligent Symptom Analysis, Smarter Healthcare</p>
+          <div class="cta-btn" onclick="window.location.href='/appointment/'">Book Appointment →</div>
+
+          <!-- User Counter -->
+          <div class="user-counter" onclick="showPatientStats()">
+            <div class="user-images">
+              <img src="https://i.pravatar.cc/35?img=1" alt="user1">
+              <img src="https://i.pravatar.cc/35?img=2" alt="user2">
+              <img src="https://i.pravatar.cc/35?img=3" alt="user3">
+            </div>
+            <span><strong>{{ hospital_count|default:'50' }}+</strong> Hospitals | <strong>{{ doctor_count|default:'200' }}+</strong> Doctors</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="col-md-5">
+        <div class="right-card" onclick="window.location.href='/about/'">
+          <h5>Patient Experience</h5>
+          <p>Improve all patient-friendly interactions</p>
+          <span class="text-success">+12%</span> | <span>96% Satisfaction</span>
+          <img src="{% static 'image/d2.png' %}" alt="healthcare-analytics">
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Note -->
+    <div class="footer-note p-4 rounded-3" style="background: #f8fafc; border: 1px solid #e2e8f0; margin-top: 2rem;">
+      <div class="d-flex align-items-center mb-2">
+        <i class="fas fa-shield-alt me-2" style="color: #059669;"></i>
+        <strong style="color: #1e293b; font-size: 1.1rem;">SymptomWise</strong>
+        <span class="badge ms-2" style="background: #2563eb; color: white; font-size: 0.7rem;">AI-Powered</span>
+      </div>
+      <p class="mb-2" style="color: #64748b; line-height: 1.6;">
+        Your trusted healthcare companion founded by <strong>Roshan Shukla</strong> and <strong>Shalini Yadav</strong> in Gorakhpur, U.P. 
+        We provide intelligent symptom analysis, hospital connections, and personalized healthcare recommendations.
+      </p>
+      <div class="d-flex align-items-center justify-content-between flex-wrap">
+        <div class="d-flex align-items-center">
+          <i class="fas fa-phone me-2" style="color: #dc2626;"></i>
+          <span style="color: #dc2626; font-weight: 600;">Emergency: Call 108</span>
+        </div>
+        <div class="d-flex align-items-center">
+          <i class="fas fa-brain me-2" style="color: #2563eb;"></i>
+          <span style="color: #2563eb; font-weight: 500;">Powered by Advanced AI</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5" style="background: #f8fafc;">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="section-title">Our Expert Doctors</h2>
+      <p class="text-secondary" style="max-width: 600px; margin: 0 auto;">
+        Meet our team of qualified healthcare professionals dedicated to providing you with the best medical care.
+      </p>
+    </div>
+
+    <div class="row g-4">
+      {% for b in doctors %}
+      <div class="col-lg-3 col-md-4 col-sm-6">
+        <div class="doctor-card h-100">
+          <a href="{% url 'doctor_list' b.id %}" style="text-decoration:none; color:inherit;">
+            <div class="card shadow-sm border-0 rounded-4 h-100 text-center overflow-hidden">
+
+              <div class="p-3" style="background-color:#f0f4f8;">
+                {% if b.profile_image and b.profile_image.url %}
+                  <img src="{{ b.profile_image.url }}" alt="{{ b.first_name }}" class="img-fluid rounded-3" style="height:250px; width:100%; object-fit:cover; object-position: center bottom;">
+                {% else %}
+                  <img src="{% static 'images/default-doctor.png' %}" alt="Default Doctor" class="img-fluid rounded-3" style="height:250px; width:100%; object-fit:cover; object-position: center bottom;">
+                {% endif %}
+              </div>
+
+              <div class="card-body bg-white">
+                <h5 class="fw-bold mb-1">{{ b.title }} {{ b.first_name }} {{ b.last_name }}</h5>
+                <p class="mb-1 text-primary fw-bold" style="font-size:14px;">
+                  {{ b.category.name|default:"Specialist" }}
+                </p>
+                
+                <p class="mb-2 text-muted" style="font-size:13px;">
+                  Exp: {{ b.experience_years|default:"N/A" }} yrs
+                </p>
+                
+                <span class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                  View Profile
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <div class="text-center py-5">
+          <p>No doctors are currently available.</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if total_doctors > 8 %}
+    <div class="text-center mt-4">
+      <a href="{% url 'all_doctors' %}" class="btn btn-primary btn-lg rounded-pill">
+        Show More Doctors
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Patient Testimonials Slider -->
+<div class="particles">
+  <div class="particle" style="left:10%; animation-duration:12s;"></div>
+  <div class="particle" style="left:30%; animation-duration:18s;"></div>
+  <div class="particle" style="left:50%; animation-duration:20s;"></div>
+  <div class="particle" style="left:70%; animation-duration:16s;"></div>
+  <div class="particle" style="left:90%; animation-duration:14s;"></div>
+</div>
+
+<div class="sliders-wrapper" style="background-color: #f3f0f0;">
+  <!-- Top Slider -->
+  <div class="slider-container">
+    <h2 class="section-title text-center mb-4"
+      style="color:#000; font-weight:bold; margin-top: -5px; border-radius:8px; text-transform:uppercase;">
+      Patient Testimonials
+    </h2>
+    <div class="slider">
+      <img src="{% static 'image/q.jpeg' %}" style="width:200px;">
+      <img src="{% static 'image/p1.jpg' %}" style="width:280px;">
+      <img src="{% static 'image/2.jpg' %}" style="width:320px;">
+      <img src="{% static 'image/p2.jpg' %}" style="width:240px;">
+      <img src="{% static 'image/7.jpg' %}" style="width:300px;">
+      <!-- duplicate -->
+      <img src="{% static 'image/p4.jpg' %}" style="width:200px;">
+      <img src="{% static 'image/5.jpg' %}" style="width:280px;">
+      <img src="{% static 'image/p5.jpg' %}" style="width:320px;">
+      <img src="{% static 'image/q.jpeg' %}" style="width:240px;">
+      <img src="{% static 'image/p11.jpg' %}" style="width:300px;">
+    </div>
+  </div>
+
+  <!-- Bottom Slider -->
+  <div class="slider-container">
+    <div class="slider reverse">
+      <img src="{% static 'image/img1.jpg' %}" style="width:230px;">
+      <img src="{% static 'image/p6.jpg' %}" style="width:280px;">
+      <img src="{% static 'image/img2.jpg' %}" style="width:260px;">
+      <img src="{% static 'image/p7.jpg' %}" style="width:310px;">
+      <img src="{% static 'image/img3.jpg' %}" style="width:200px;">
+      <!-- duplicate -->
+      <img src="{% static 'image/img4.jpg' %}" style="width:230px;">
+      <img src="{% static 'image/p8.jpg' %}" style="width:280px;">
+      <img src="{% static 'image/img1.jpg' %}" style="width:260px;">
+      <img src="{% static 'image/p9.jpg' %}" style="width:310px;">
+      <img src="{% static 'image/img2.jpg' %}" style="width:200px;">
+    </div>
+  </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="faq-section">
+  <h2 class="faq-title">Frequently Asked Questions</h2>
+  <p class="faq-subtitle">Find answers to common questions about our services, treatments, appointments, and patient care options to help you make informed health decisions.</p>
+
+  <div class="accordion" id="faqAccordion">
+    <!-- FAQ 1 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+          How can I book an appointment with our healthcare providers?
+        </button>
+      </h2>
+      <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+        <div class="accordion-body">
+          You can book an appointment online via our website, mobile app, or by calling our helpline. Walk-in appointments are also available at most of our partner facilities.
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ 2 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+          Can I consult with a specialist directly without a referral?
+        </button>
+      </h2>
+      <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+        <div class="accordion-body">
+          Yes, our platform allows patients to directly consult with specialists even without a referral from a general practitioner.
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ 3 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+          Do we offer second opinions or online consultations?
+        </button>
+      </h2>
+      <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+        <div class="accordion-body">
+          Yes, we provide both second opinions and online consultations with qualified doctors across various specialties through our telemedicine platform.
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ 4 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+          What information do I need to provide when booking an appointment?
+        </button>
+      </h2>
+      <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+        <div class="accordion-body">
+          You will need to provide your full name, contact details, preferred doctor/specialty, and a brief description of your medical concern or reason for the visit.
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ 5 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+          Will I be informed about treatment costs and duration?
+        </button>
+      </h2>
+      <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+        <div class="accordion-body">
+          Yes, we provide clear estimates of treatment costs and expected duration before any procedures, ensuring complete transparency for our patients.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript for Interactive Elements -->
+<script>
+function showFeatureInfo(feature) {
+  const features = {
+    'ai': {
+      title: '🧠 AI Intelligence',
+      message: 'Advanced AI-powered symptom analysis and health insights. Our intelligent system helps you understand your symptoms and provides personalized healthcare recommendations.'
+    },
+    'security': {
+      title: '🔒 Security & Privacy',
+      message: 'Your health data is protected with enterprise-grade security. We ensure complete privacy and confidentiality of all patient information with encrypted data storage.'
+    },
+    'personalization': {
+      title: '🎯 Personalization',
+      message: 'Tailored healthcare recommendations based on your medical history, symptoms, and preferences. Get personalized treatment suggestions and doctor recommendations.'
+    }
+  };
+  
+  const info = features[feature];
+  if (info) {
+    // Create a modern modal-style alert
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    `;
+    
+    modal.innerHTML = `
+      <div style="
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        max-width: 500px;
+        margin: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      ">
+        <h4 style="color: #2563eb; margin-bottom: 15px; font-weight: 600;">${info.title}</h4>
+        <p style="color: #475569; line-height: 1.6; margin-bottom: 20px;">${info.message}</p>
+        <button onclick="this.parentElement.parentElement.remove()" style="
+          background: #2563eb;
+          color: white;
+          border: none;
+          padding: 10px 24px;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: 600;
+          transition: all 0.2s ease;
+        " onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Got it!</button>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Remove modal when clicking outside
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.remove();
+      }
+    });
+  }
+}
+
+function showPatientStats() {
+  const modal = document.createElement('div');
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  `;
+  
+  modal.innerHTML = `
+    <div style="
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 500px;
+      margin: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    ">
+      <h4 style="color: #2563eb; margin-bottom: 20px; font-weight: 600;">📊 SymptomWise Network</h4>
+      <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
+        <div>
+          <h3 style="color: #059669; margin: 0; font-weight: 700;">{{ hospital_count|default:'50' }}+</h3>
+          <p style="margin: 5px 0; color: #64748b; font-size: 14px;">Partner Hospitals</p>
+        </div>
+        <div>
+          <h3 style="color: #2563eb; margin: 0; font-weight: 700;">{{ doctor_count|default:'200' }}+</h3>
+          <p style="margin: 5px 0; color: #64748b; font-size: 14px;">Qualified Doctors</p>
+        </div>
+      </div>
+      <p style="color: #475569; line-height: 1.6; margin-bottom: 20px; font-size: 15px;">
+        Join our growing network of healthcare providers and patients. 
+        Experience quality healthcare with AI-powered insights.
+      </p>
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button onclick="window.location.href='/hospitals/'" style="
+          background: #2563eb;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: 600;
+          transition: all 0.2s ease;
+        " onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Find Hospitals</button>
+        <button onclick="this.parentElement.parentElement.parentElement.remove()" style="
+          background: transparent;
+          color: #64748b;
+          border: 1px solid #cbd5e1;
+          padding: 10px 20px;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: 600;
+          transition: all 0.2s ease;
+        " onmouseover="this.style.borderColor='#94a3b8'; this.style.color='#475569'" onmouseout="this.style.borderColor='#cbd5e1'; this.style.color='#64748b'">Close</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  
+  // Remove modal when clicking outside
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      modal.remove();
+    }
+  });
+}
+</script>
+{% endblock %}

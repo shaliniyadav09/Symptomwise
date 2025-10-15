@@ -1,0 +1,387 @@
+    .navbar {
+      background-color: white;
+      padding: 10px 50px;
+    }
+    .navbar-brand img {
+      height: 40px;
+      margin-right: 10px;
+    }
+    .navbar-nav .nav-link {
+      color: black;
+      font-weight: 500;
+      margin-left: 20px;
+    }
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .dropdown-menu a:hover {
+      color: #007bff;
+    }
+    .appointment-btn {
+      background-color: #0d6efd;
+      color: white !important;
+      padding: 8px 15px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .appointment-btn:hover {
+      background-color: #0b5ed7;
+    }
+    /*main section find doctor*/
+    body {
+      background-color: #f8f9fa;
+    }
+    .hero-section {
+      background-color: #e9f2f5;
+      padding: 30px;
+    }
+    .search-bar {
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .search-input {
+      border: none;
+      padding: 12px 20px;
+      flex: 1;
+    }
+    .search-input:focus {
+      outline: none;
+      box-shadow: none;
+    }
+    .search-btn {
+      background-color: #007b8f;
+      color: white;
+      border: none;
+      padding: 0 20px;
+    }
+    .filter-section {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .doctor-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 15px;
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+    }
+    .doctor-card img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .appointment-btn {
+      background-color: #ffd333;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+    .sort-btn {
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      padding: 5px 15px;
+    }
+      .doctor-card {
+      border: 1px solid #ddd;
+      border-radius: 15px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+    }
+    .doctor-img {
+      width: 130px;
+      height: 130px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    .btn-call {
+      background-color: #002d47;
+      color: white;
+      border-radius: 50px;
+      padding: 10px 20px;
+    }
+    .btn-call:hover {
+      background-color: #004d70;
+    }
+    .btn-appointment {
+      background-color: #ffd54f;
+      border-radius: 50px;
+      padding: 10px 30px;
+      font-weight: bold;
+    }
+    .btn-appointment:hover {
+      background-color: #ffca28;
+    }
+    .hospital-btn {
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 50px;
+      padding: 5px 15px;
+      font-weight: 500;
+    }
+    .info-icon {
+      margin-right: 5px;
+    }
+    /*book appointement*/
+        body {
+        background-color: #ffffff;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* Main container */
+    .appointment-container {
+        max-width: 480px;
+        margin: 50px auto;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        padding: 20px;
+        animation: fadeInUp 0.4s ease;
+    }
+
+    /* Book Appointment Button */
+    #bookBtn {
+        background-color: #e63946;
+        border: none;
+        padding: 14px 28px;
+        font-size: 18px;
+        font-weight: 500;
+        border-radius: 50px;
+        box-shadow: 0 4px 10px rgba(230, 57, 70, 0.4);
+        transition: all 0.3s ease;
+    }
+
+    #bookBtn:hover {
+        background-color: #d62839;
+        box-shadow: 0 6px 14px rgba(230, 57, 70, 0.6);
+    }
+
+    /* Slots */
+    .slot-btn {
+        border: 1.5px solid #e63946;
+        background: white;
+        padding: 10px 16px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 6px;
+        font-weight: 500;
+        color: #e63946;
+        min-width: 95px;
+        text-align: center;
+    }
+
+    .slot-btn:hover {
+        background: #ffe5e9;
+    }
+
+    .slot-btn.selected {
+        background: #e63946;
+        color: white;
+        border-color: #e63946;
+    }
+
+    /* Slide-down animation */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    /* otp */
+
+        body {
+        background-color: #ffffff;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* Appointment Container */
+    .appointment-container {
+        max-width: 480px;
+        margin: 30px auto;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        padding: 20px;
+    }
+
+    /* Slot Buttons */
+    .slot-btn {
+        border: 1.5px solid #e63946;
+        background: white;
+        padding: 10px 16px;
+        border-radius: 25px;
+        cursor: pointer;
+        margin: 6px;
+        font-weight: 500;
+        color: #e63946;
+        min-width: 95px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .slot-btn:hover {
+        background: #ffe5e9;
+    }
+
+    .slot-btn.selected {
+        background: #e63946;
+        color: white;
+        border-color: #e63946;
+    }
+
+    /* Red Primary Button */
+    .btn-red {
+        background-color: #e63946;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px;
+        width: 100%;
+        font-size: 16px;
+        transition: background 0.3s ease;
+    }
+
+    .btn-red:hover {
+        background-color: #d62839;
+    }
+
+    /* OTP Box */
+    .otp-container {
+        max-width: 400px;
+        margin: 30px auto;
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .otp-input {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        text-align: center;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .otp-input:focus {
+        border-color: #e63946;
+        box-shadow: 0 0 8px rgba(230, 57, 70, 0.4);
+    }
+        .btn-red { background-color: red; color: white; }
+    .slot-btn {
+        margin: 5px;
+        padding: 10px 15px;
+        border: 1px solid #ccc;
+        background: white;
+        cursor: pointer;
+    }
+    .slot-btn.selected {
+        background: red;
+        color: white;
+    }
+    /* sdf */
+      :root{
+    --ap-bg:#eaf5f6;               /* page background */
+    --ap-card:#ffffff;             /* card background */
+    --ap-border:#dfe7ea;
+    --ap-text:#1f2d3d;
+    --ap-muted:#6c7a86;
+    --ap-accent:#0aa1b2;           /* Apollo teal (icons, accents) */
+    --ap-primary:#0a7aa8;          /* Apollo blue for CTAs */
+    --ap-primary-hover:#096c94;
+    --ap-pill:#f5fafb;
+    --radius:18px;
+  }
+
+  body{background:var(--ap-bg); font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; color:var(--ap-text);}
+
+  /* step containers (centered max width) */
+  .step-wrap{max-width:980px; margin:28px auto;}
+
+  /* Red theme used earlier for first steps */
+  .btn-red{background:#e63946; color:#fff; border:none; border-radius:10px; padding:.9rem 1.3rem;}
+  .btn-red:hover{background:#d62a37;}
+
+  /* ===== Apollo details + summary layout ===== */
+  .ap-section{margin-top:28px;}
+  .ap-title{font-weight:700; font-size:26px; margin-bottom:16px;}
+
+  .ap-card{
+    background:var(--ap-card);
+    border:1px solid var(--ap-border);
+    border-radius:var(--radius);
+    box-shadow:0 8px 20px rgba(15, 25, 40, .06);
+    padding:24px;
+  }
+
+  /* left: user details */
+  .ap-user .ap-subtitle{font-weight:700; font-size:20px; margin-bottom:14px;}
+  .ap-help{color:var(--ap-muted); font-size:14px; margin-bottom:14px;}
+
+  /* Inputs like Apollo (rounded, soft border) */
+  .ap-input{
+    height:48px;
+    border:1px solid var(--ap-border);
+    border-radius:10px;
+    background:#fff;
+    font-size:15px;
+  }
+  .ap-input:focus{border-color:var(--ap-primary); box-shadow:0 0 0 4px rgba(10,122,168,.12);}
+
+  .ap-inline-gap{gap:14px;}
+
+  /* Gender radio inline */
+  .ap-gender .form-check{margin-right:18px;}
+  .ap-gender .form-check-input:checked{background-color:var(--ap-primary); border-color:var(--ap-primary);}
+
+  /* Left footer buttons */
+  .ap-left-actions .btn-outline{
+    background:#fff; border:2px solid var(--ap-border); border-radius:40px; padding:.8rem 1.2rem; font-weight:600;
+  }
+  .ap-left-actions .btn-outline:hover{border-color:#bfcbd1; background:#f9fbfc;}
+  .ap-left-actions .btn-primary{
+    background:var(--ap-primary); border:none; border-radius:40px; padding:.9rem 1.6rem; font-weight:700;
+  }
+  .ap-left-actions .btn-primary:hover{background:var(--ap-primary-hover);}
+
+  /* right: summary */
+  .ap-summary-title{font-weight:700; font-size:20px; margin-bottom:14px;}
+  .ap-summary .ap-chip{
+    border:1px solid var(--ap-border);
+    border-radius:12px;
+    padding:12px 14px;
+    background:#fff;
+    font-weight:600;
+  }
+  .ap-summary .ap-box{
+    border:1px solid var(--ap-border);
+    border-radius:12px;
+    padding:14px;
+    background:#fff;
+  }
+  .ap-terms{font-size:14px; color:var(--ap-muted);}
+  .ap-terms a{text-decoration:underline;}
+
+  /* OTP inputs */
+  .otp-input{width:60px; height:60px; text-align:center; font-size:24px; border:2px solid #ccc; border-radius:10px; outline:none;}
+  .otp-input:focus{border-color:#e63946; box-shadow:0 0 8px rgba(230,57,70,.4);}
+
+  /* Hide helpers */
+  .hidden{display:none !important;}
+
+  @media (max-width: 992px){
+    .ap-left-actions{flex-direction:column; gap:10px;}
+  }

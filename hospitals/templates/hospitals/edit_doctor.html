@@ -1,0 +1,309 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Doctor - {{ hospital.name }} - SymptomWise{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hospital-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 2rem 0;
+        margin-top: -76px;
+        padding-top: calc(2rem + 76px);
+    }
+    
+    .hospital-nav {
+        background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 1rem 0;
+        margin-bottom: 2rem;
+    }
+    
+    .hospital-nav .nav-link {
+        color: var(--primary-color);
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        margin: 0 0.25rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .hospital-nav .nav-link:hover,
+    .hospital-nav .nav-link.active {
+        background: var(--primary-color);
+        color: white;
+    }
+    
+    .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .form-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+    
+    .section-title {
+        color: var(--primary-color);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--primary-color);
+        display: inline-block;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hospital Header -->
+<div class="hospital-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="mb-2">
+                    <i class="fas fa-user-edit me-3"></i>Edit Doctor
+                </h1>
+                <p class="mb-0 opacity-90">{{ hospital.name }} - Update Dr. {{ doctor.full_name }}'s information</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'hospitals:doctors' %}" class="btn btn-light">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Doctors
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Navigation -->
+<div class="hospital-nav">
+    <div class="container">
+        <nav class="nav">
+            <a class="nav-link" href="{% url 'hospitals:dashboard' %}">
+                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+            </a>
+            <a class="nav-link active" href="{% url 'hospitals:doctors' %}">
+                <i class="fas fa-user-md me-2"></i>Manage Doctors
+            </a>
+            <a class="nav-link" href="{% url 'hospitals:appointments' %}">
+                <i class="fas fa-calendar-alt me-2"></i>Appointments
+            </a>
+            <a class="nav-link" href="{% url 'hospitals:categories' %}">
+                <i class="fas fa-tags me-2"></i>Categories
+            </a>
+            <a class="nav-link" href="{% url 'hospitals:logout' %}">
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+            </a>
+        </nav>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Basic Information -->
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <i class="fas fa-user me-2"></i>Basic Information
+                            </h4>
+                            
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">Title <span class="text-danger">*</span></label>
+                                    <select name="title" class="form-select" required>
+                                        <option value="Dr." {% if doctor.title == "Dr." %}selected{% endif %}>Dr.</option>
+                                        <option value="Prof." {% if doctor.title == "Prof." %}selected{% endif %}>Prof.</option>
+                                        <option value="Prof. Dr." {% if doctor.title == "Prof. Dr." %}selected{% endif %}>Prof. Dr.</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">First Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="first_name" class="form-control" required 
+                                           value="{{ doctor.first_name }}" placeholder="Enter first name">
+                                </div>
+                                <div class="col-md-5 mb-3">
+                                    <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="last_name" class="form-control" required 
+                                           value="{{ doctor.last_name }}" placeholder="Enter last name">
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Category/Specialty <span class="text-danger">*</span></label>
+                                    <select name="category" class="form-select" required>
+                                        <option value="">Select Category</option>
+                                        {% for category in categories %}
+                                            <option value="{{ category.id }}" {% if category.id == doctor.category.id %}selected{% endif %}>
+                                                {{ category.name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">License Number</label>
+                                    <input type="text" name="license_number" class="form-control" 
+                                           value="{{ doctor.license_number }}" placeholder="Medical license number">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Contact Information -->
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <i class="fas fa-phone me-2"></i>Contact Information
+                            </h4>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" name="email" class="form-control" 
+                                           value="{{ doctor.email }}" placeholder="doctor@example.com">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Phone</label>
+                                    <input type="tel" name="phone" class="form-control" 
+                                           value="{{ doctor.phone }}" placeholder="+91 9876543210">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Professional Information -->
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <i class="fas fa-graduation-cap me-2"></i>Professional Information
+                            </h4>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Experience (Years)</label>
+                                    <input type="number" name="experience_years" class="form-control" 
+                                           min="0" max="70" value="{{ doctor.experience_years }}" placeholder="Years of experience">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Languages</label>
+                                    <input type="text" name="languages" class="form-control" 
+                                           value="{{ doctor.languages }}" placeholder="English, Hindi, etc.">
+                                    <div class="form-text">Comma-separated languages</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Education & Qualifications</label>
+                                <textarea name="education" class="form-control" rows="3" 
+                                          placeholder="MBBS, MD, Specializations, Certifications...">{{ doctor.education }}</textarea>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Professional Bio</label>
+                                <textarea name="bio" class="form-control" rows="4" 
+                                          placeholder="Brief professional biography, areas of expertise, achievements...">{{ doctor.bio }}</textarea>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Profile Image</label>
+                                {% if doctor.profile_image %}
+                                    <div class="mb-2">
+                                        <img src="{{ doctor.profile_image.url }}" alt="Current Image" 
+                                             style="max-width: 150px; max-height: 150px; border-radius: 8px; border: 2px solid #e9ecef;">
+                                        <div class="form-text">Current image</div>
+                                    </div>
+                                {% endif %}
+                                <input type="file" name="profile_image" class="form-control" 
+                                       accept="image/*" id="profileImageInput">
+                                <div class="form-text">Upload a new professional photo (JPG, PNG, GIF - Max 5MB) - Leave empty to keep current image</div>
+                                <div id="imagePreview" class="mt-2" style="display: none;">
+                                    <img id="previewImg" src="" alt="Preview" 
+                                         style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #e9ecef;">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Consultation Details -->
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <i class="fas fa-rupee-sign me-2"></i>Consultation Details
+                            </h4>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Consultation Fee (₹)</label>
+                                    <input type="number" name="consultation_fee" class="form-control" 
+                                           min="0" step="0.01" value="{{ doctor.consultation_fee }}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Status</label>
+                                    <select name="is_available" class="form-select">
+                                        <option value="1" {% if doctor.is_available %}selected{% endif %}>Available</option>
+                                        <option value="0" {% if not doctor.is_available %}selected{% endif %}>Unavailable</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Buttons -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg px-5 me-3">
+                                <i class="fas fa-save me-2"></i>Update Doctor
+                            </button>
+                            <a href="{% url 'hospitals:doctors' %}" class="btn btn-outline-secondary btn-lg px-5">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Image preview functionality
+        const imageInput = document.getElementById('profileImageInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            
+            if (file) {
+                // Check file size (5MB limit)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    this.value = '';
+                    imagePreview.style.display = 'none';
+                    return;
+                }
+                
+                // Check file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select a valid image file');
+                    this.value = '';
+                    imagePreview.style.display = 'none';
+                    return;
+                }
+                
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

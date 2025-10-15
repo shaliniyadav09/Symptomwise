@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Appointment</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .nav { margin-bottom: 20px; }
+        .nav a { margin-right: 15px; text-decoration: none; color: #007bff; }
+        .container { max-width: 600px; }
+        .form-group { margin: 15px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        select, input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        button { padding: 12px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/userdashboard/">Dashboard</a>
+        <a href="/chatbot/">AI Chatbot</a>
+    </div>
+    
+    <div class="container">
+        <h2>Book Appointment</h2>
+        
+        <form method="post" action="/bookappointment/">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Hospital:</label>
+                <select name="hospital" required>
+                    <option value="">Select Hospital</option>
+                    {% for hospital in hospitals %}
+                        <option value="{{ hospital.id }}">{{ hospital.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Doctor:</label>
+                <select name="doctor" required>
+                    <option value="">Select Doctor</option>
+                    {% for doctor in doctors %}
+                        <option value="{{ doctor.id }}">Dr. {{ doctor.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Appointment Date:</label>
+                <input type="date" name="date" required>
+            </div>
+            <div class="form-group">
+                <label>Appointment Time:</label>
+                <input type="time" name="time" required>
+            </div>
+            <div class="form-group">
+                <label>Reason for Visit:</label>
+                <input type="text" name="reason" placeholder="Brief description of your concern">
+            </div>
+            <button type="submit">Book Appointment</button>
+        </form>
+        
+        <p style="margin-top: 20px;">
+            Need help choosing a doctor? <a href="/chatbot/">Ask our AI Chatbot</a>
+        </p>
+    </div>
+</body>
+</html>

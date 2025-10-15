@@ -1,0 +1,30 @@
+{%extends 'adminbase.html'%}
+{%load static%}
+{% block admin%}
+<h3>Add Doctor</h3>
+<div class="row">
+    <div class="col-sm-8 mx-auto">
+        <div class="card p-4">
+        <form method="post">
+            {%csrf_token%}
+            <div class="mb-3">
+           <label for="n" class="form-label">Category Name</label>
+           <input type="text" name="name" class="form-control" id="n"/>
+        </div>
+             <div class="mb-3">
+           <label for="desc" class="form-label">Description</label>
+           <textarea  name="description" class="form-control" id="desc"></textarea>
+        </div> 
+        <div class="text-center mt-4">
+            <button class="btn btn-success" type="submit">Add category</button>
+        </div>
+
+
+        </form>
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}

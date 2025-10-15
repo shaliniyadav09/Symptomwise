@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Categories - {{ hospital.name }} - SymptomWise{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hospital-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 2rem 0;
+        margin-top: -76px;
+        padding-top: calc(2rem + 76px);
+    }
+    
+    .hospital-nav {
+        background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 1rem 0;
+        margin-bottom: 2rem;
+    }
+    
+    .hospital-nav .nav-link {
+        color: var(--primary-color);
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        margin: 0 0.25rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .hospital-nav .nav-link:hover,
+    .hospital-nav .nav-link.active {
+        background: var(--primary-color);
+        color: white;
+    }
+    
+    .category-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+        border-left: 4px solid var(--primary-color);
+    }
+    
+    .category-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    
+    .action-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 10px;
+        text-decoration: none;
+        display: inline-block;
+        margin: 0.25rem;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+    
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,119,182,0.3);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hospital Header -->
+<div class="hospital-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="mb-2">
+                    <i class="fas fa-tags me-3"></i>Medical Categories
+                </h1>
+                <p class="mb-0 opacity-90">{{ hospital.name }} - Manage your medical specialties and categories</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'hospitals:add_category' %}" class="btn btn-light">
+                    <i class="fas fa-plus me-2"></i>Add New Category
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Navigation -->
+<div class="hospital-nav">
+    <div class="container">
+        <nav class="nav">
+            <a class="nav-link" href="{% url 'hospitals:dashboard' %}">
+                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+            </a>
+            <a class="nav-link" href="{% url 'hospitals:doctors' %}">
+                <i class="fas fa-user-md me-2"></i>Manage Doctors
+            </a>
+            <a class="nav-link" href="{% url 'hospitals:appointments' %}">
+                <i class="fas fa-calendar-alt me-2"></i>Appointments
+            </a>
+            <a class="nav-link active" href="{% url 'hospitals:categories' %}">
+                <i class="fas fa-tags me-2"></i>Categories
+            </a>
+            <a class="nav-link" href="{% url 'hospitals:logout' %}">
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+            </a>
+        </nav>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Quick Actions -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="text-primary mb-3">
+                <i class="fas fa-bolt me-2"></i>Quick Actions
+            </h5>
+            <div class="d-flex flex-wrap">
+                <a href="{% url 'hospitals:add_category' %}" class="action-btn">
+                    <i class="fas fa-plus me-2"></i>Add New Category
+                </a>
+                <a href="{% url 'hospitals:add_doctor' %}" class="action-btn">
+                    <i class="fas fa-user-plus me-2"></i>Add Doctor
+                </a>
+                <a href="{% url 'hospitals:dashboard' %}" class="action-btn">
+                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Categories List -->
+    {% if categories %}
+        <div class="row">
+            {% for category in categories %}
+                <div class="col-lg-6 mb-4">
+                    <div class="category-card">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h4 class="text-primary mb-1">{{ category.name }}</h4>
+                                {% if category.specialty %}
+                                    <small class="text-muted">
+                                        <i class="fas fa-link me-1"></i>Linked to: {{ category.specialty.name }}
+                                    </small>
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if category.is_active %}
+                                    <span class="badge bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Inactive</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        {% if category.description %}
+                            <p class="text-muted mb-3">{{ category.description }}</p>
+                        {% endif %}
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>
+                                    Created: {{ category.created_at|date:"M d, Y" }}
+                                </small>
+                            </div>
+                            <div>
+                                <span class="badge bg-primary">
+                                    {{ category.doctor_set.count }} Doctor{{ category.doctor_set.count|pluralize }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <div class="card">
+                <div class="card-body py-5">
+                    <i class="fas fa-tags fa-4x text-muted mb-4"></i>
+                    <h3 class="text-muted mb-3">No Categories Added Yet</h3>
+                    <p class="text-muted mb-4">Create medical categories to organize your doctors by specialties.</p>
+                    <a href="{% url 'hospitals:add_category' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-plus me-2"></i>Add Your First Category
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    
+    <!-- Info Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="text-primary mb-3">
+                        <i class="fas fa-info-circle me-2"></i>About Medical Categories
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>Purpose:</strong> Categories help organize your doctors by medical specialties.</p>
+                            <p class="mb-2"><strong>Benefits:</strong> Easier patient navigation and appointment booking.</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>Examples:</strong> Cardiology, Pediatrics, General Medicine, etc.</p>
+                            <p class="mb-0"><strong>Note:</strong> You need at least one category before adding doctors.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

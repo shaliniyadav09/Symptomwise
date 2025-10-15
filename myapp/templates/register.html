@@ -1,0 +1,787 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register - SymptomWise{% endblock %}
+
+{% block extra_css %}
+<style>
+    .register-container {
+        background: #ffffff;
+        min-height: calc(100vh - 76px);
+        display: flex;
+        align-items: center;
+        padding: 2rem 0;
+    }
+    
+    .register-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        overflow: hidden;
+    }
+    
+    .register-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+    }
+    
+    .register-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+        opacity: 0.3;
+    }
+    
+    .register-icon {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .register-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .register-subtitle {
+        opacity: 0.9;
+        margin-bottom: 0;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .register-form {
+        padding: 2.5rem;
+    }
+    
+    .form-floating {
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+    
+    .form-floating > .form-control {
+        height: 3.5rem;
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        padding-right: 3.5rem; /* More space for eye icon */
+    }
+    
+    .form-floating > .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(0, 119, 182, 0.15);
+        transform: translateY(-2px);
+    }
+    
+    .form-floating > label {
+        color: #6c757d;
+        font-weight: 500;
+    }
+    
+    /* Fixed password toggle positioning */
+    .password-toggle {
+        position: absolute;
+        top: 50%;
+        right: 1rem;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #6c757d;
+        cursor: pointer;
+        z-index: 10;
+        padding: 0.5rem;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1rem;
+    }
+    
+    .password-toggle:hover {
+        color: var(--primary-color);
+        background-color: rgba(0, 119, 182, 0.1);
+    }
+    
+    .password-toggle:focus {
+        outline: none;
+        color: var(--primary-color);
+        background-color: rgba(0, 119, 182, 0.1);
+    }
+    
+    .register-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border: none;
+        border-radius: 12px;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .register-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 119, 182, 0.3);
+    }
+    
+    .register-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+    
+    .register-btn:hover::before {
+        left: 100%;
+    }
+    
+    /* Password strength indicator */
+    .password-strength {
+        height: 6px;
+        border-radius: 3px;
+        margin-top: 0.5rem;
+        transition: all 0.3s ease;
+        background: #e9ecef;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .password-strength-bar {
+        height: 100%;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+        width: 0%;
+    }
+    
+    .strength-weak .password-strength-bar { 
+        background: #dc3545; 
+        width: 25%; 
+    }
+    
+    .strength-fair .password-strength-bar { 
+        background: #ffc107; 
+        width: 50%; 
+    }
+    
+    .strength-good .password-strength-bar { 
+        background: #fd7e14; 
+        width: 75%; 
+    }
+    
+    .strength-strong .password-strength-bar { 
+        background: #28a745; 
+        width: 100%; 
+    }
+    
+    .password-requirements {
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
+    
+    .requirement {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.25rem;
+        color: #6c757d;
+        transition: color 0.3s ease;
+    }
+    
+    .requirement i {
+        margin-right: 0.5rem;
+        width: 16px;
+        transition: all 0.3s ease;
+    }
+    
+    .requirement.valid {
+        color: #28a745;
+    }
+    
+    .requirement.invalid {
+        color: #dc3545;
+    }
+    
+    .password-strength-text {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+    
+    .strength-weak .password-strength-text { color: #dc3545; }
+    .strength-fair .password-strength-text { color: #ffc107; }
+    .strength-good .password-strength-text { color: #fd7e14; }
+    .strength-strong .password-strength-text { color: #28a745; }
+    
+    .login-link {
+        background: rgba(0, 119, 182, 0.1);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+    
+    .quick-access {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        backdrop-filter: blur(10px);
+    }
+    
+    .feature-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+    
+    .feature-item:hover {
+        background: rgba(255, 255, 255, 0.9);
+        transform: translateX(5px);
+    }
+    
+    .feature-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+    
+    .password-match {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        font-weight: 500;
+    }
+    
+    .password-match.valid {
+        color: #28a745;
+    }
+    
+    .password-match.invalid {
+        color: #dc3545;
+    }
+    
+    @media (max-width: 768px) {
+        .register-container {
+            padding: 1rem 0;
+        }
+        
+        .register-form {
+            padding: 1.5rem;
+        }
+        
+        .register-header {
+            padding: 1.5rem;
+        }
+        
+        .register-title {
+            font-size: 1.5rem;
+        }
+        
+        .password-toggle {
+            width: 2rem;
+            height: 2rem;
+            right: 0.75rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="register-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="register-card">
+                    <div class="row g-0">
+                        <div class="col-lg-7">
+                            <div class="register-header">
+                                <div class="register-icon">
+                                    <i class="fas fa-user-plus fa-2x"></i>
+                                </div>
+                                <h2 class="register-title">Join SymptomWise</h2>
+                                <p class="register-subtitle">Create your account for intelligent healthcare management</p>
+                            </div>
+                            
+                            <div class="register-form">
+                                <form method="post" id="registerForm" data-validate="true" class="needs-validation" novalidate>
+                                    {% csrf_token %}
+                                    
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="username" name="username" 
+                                               placeholder="Username" required
+                                               pattern="^[a-zA-Z][a-zA-Z0-9_-]*$"
+                                               title="Username must start with a letter and contain only letters, numbers, underscore, and hyphen"
+                                               minlength="3" maxlength="30">
+                                        <label for="username">
+                                            <i class="fas fa-user me-2"></i>Username
+                                        </label>
+                                        <div class="invalid-feedback">
+                                            Username must start with a letter and contain only letters, numbers, underscore, and hyphen
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-floating mb-3">
+                                        <input type="email" class="form-control" id="email" name="email" 
+                                               placeholder="Email Address" required>
+                                        <label for="email">
+                                            <i class="fas fa-envelope me-2"></i>Email Address
+                                        </label>
+                                        <div class="invalid-feedback">
+                                            Please enter a valid email address
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-floating mb-3 position-relative">
+                                        <input type="password" class="form-control" id="password" name="password" 
+                                               placeholder="Password" required
+                                               minlength="8">
+                                        <label for="password">
+                                            <i class="fas fa-lock me-2"></i>Password
+                                        </label>
+                                        <button type="button" class="password-toggle" id="togglePassword">
+                                            <i class="fas fa-eye" id="passwordIcon"></i>
+                                        </button>
+                                        
+                                        <!-- Password strength indicator -->
+                                        <div class="password-strength" id="passwordStrength">
+                                            <div class="password-strength-bar"></div>
+                                        </div>
+                                        <div class="password-strength-text" id="passwordStrengthText"></div>
+                                        
+                                        <!-- Password requirements -->
+                                        <div class="password-requirements" id="passwordRequirements">
+                                            <div class="requirement" id="lengthReq">
+                                                <i class="fas fa-times"></i>
+                                                <span>At least 8 characters</span>
+                                            </div>
+                                            <div class="requirement" id="uppercaseReq">
+                                                <i class="fas fa-times"></i>
+                                                <span>One uppercase letter</span>
+                                            </div>
+                                            <div class="requirement" id="lowercaseReq">
+                                                <i class="fas fa-times"></i>
+                                                <span>One lowercase letter</span>
+                                            </div>
+                                            <div class="requirement" id="numberReq">
+                                                <i class="fas fa-times"></i>
+                                                <span>One number</span>
+                                            </div>
+                                            <div class="requirement" id="specialReq">
+                                                <i class="fas fa-times"></i>
+                                                <span>One special character</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-floating mb-4 position-relative">
+                                        <input type="password" class="form-control" id="confirmPassword" name="confirm_password" 
+                                               placeholder="Confirm Password" required>
+                                        <label for="confirmPassword">
+                                            <i class="fas fa-lock me-2"></i>Confirm Password
+                                        </label>
+                                        <button type="button" class="password-toggle" id="toggleConfirmPassword">
+                                            <i class="fas fa-eye" id="confirmPasswordIcon"></i>
+                                        </button>
+                                        <div id="passwordMatch" class="password-match"></div>
+                                    </div>
+                                    
+                                    <div class="form-check mb-4">
+                                        <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                                        <label class="form-check-label" for="agreeTerms">
+                                            I agree to the <a href="#" class="text-primary">Terms of Service</a> and 
+                                            <a href="#" class="text-primary">Privacy Policy</a>
+                                        </label>
+                                        <div class="invalid-feedback">
+                                            You must agree to the terms and conditions
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn register-btn w-100 mb-3" id="submitBtn" disabled>
+                                        <i class="fas fa-user-plus me-2"></i>Create Account
+                                    </button>
+                                </form>
+                                
+                                <div class="login-link">
+                                    <p class="mb-0">
+                                        Already have an account? 
+                                        <a href="{% url 'login' %}" class="text-primary fw-bold text-decoration-none">
+                                            Sign in here
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-5 d-none d-lg-block">
+                            <div class="quick-access h-100 d-flex flex-column justify-content-center">
+                                <h4 class="text-primary mb-4 text-center">
+                                    <i class="fas fa-heartbeat me-2"></i>Why Choose SymptomWise?
+                                </h4>
+                                
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-robot"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">SymptomWise AI</h6>
+                                        <small class="text-muted">Intelligent symptom analysis and health guidance</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-calendar-plus"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Easy Appointments</h6>
+                                        <small class="text-muted">Book appointments with qualified doctors instantly</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-hospital"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Hospital Network</h6>
+                                        <small class="text-muted">Access to multiple hospitals and healthcare providers</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Secure & Private</h6>
+                                        <small class="text-muted">Your health data is protected with advanced security</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">24/7 Support</h6>
+                                        <small class="text-muted">Round-the-clock healthcare assistance</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center mt-4">
+                                    <p class="text-muted mb-3">Continue as guest to explore:</p>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <a href="/chatbot/" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-robot me-1"></i>Try AI
+                                        </a>
+                                        <a href="/hospitals/" class="btn btn-outline-info btn-sm">
+                                            <i class="fas fa-hospital me-1"></i>Find Hospitals
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('registerForm');
+        const usernameField = document.getElementById('username');
+        const emailField = document.getElementById('email');
+        const passwordField = document.getElementById('password');
+        const confirmPasswordField = document.getElementById('confirmPassword');
+        const submitBtn = document.getElementById('submitBtn');
+        const agreeTerms = document.getElementById('agreeTerms');
+        
+        // Password toggle functionality
+        function setupPasswordToggle(toggleButtonId, passwordFieldId, iconId) {
+            const toggleButton = document.getElementById(toggleButtonId);
+            const passwordField = document.getElementById(passwordFieldId);
+            const icon = document.getElementById(iconId);
+            
+            if (toggleButton && passwordField && icon) {
+                toggleButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordField.setAttribute('type', type);
+                    
+                    if (type === 'text') {
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            }
+        }
+        
+        // Setup password toggles
+        setupPasswordToggle('togglePassword', 'password', 'passwordIcon');
+        setupPasswordToggle('toggleConfirmPassword', 'confirmPassword', 'confirmPasswordIcon');
+        
+        // Password strength checker
+        function checkPasswordStrength(password) {
+            const strengthIndicator = document.getElementById('passwordStrength');
+            const strengthText = document.getElementById('passwordStrengthText');
+            
+            let score = 0;
+            let feedback = '';
+            
+            // Length check
+            if (password.length >= 8) score++;
+            
+            // Uppercase check
+            if (/[A-Z]/.test(password)) score++;
+            
+            // Lowercase check
+            if (/[a-z]/.test(password)) score++;
+            
+            // Number check
+            if (/\d/.test(password)) score++;
+            
+            // Special character check
+            if (/[^a-zA-Z\d]/.test(password)) score++;
+            
+            // Update strength indicator
+            strengthIndicator.className = 'password-strength';
+            
+            switch (score) {
+                case 0:
+                case 1:
+                    strengthIndicator.classList.add('strength-weak');
+                    feedback = 'Very Weak';
+                    break;
+                case 2:
+                    strengthIndicator.classList.add('strength-fair');
+                    feedback = 'Fair';
+                    break;
+                case 3:
+                case 4:
+                    strengthIndicator.classList.add('strength-good');
+                    feedback = 'Good';
+                    break;
+                case 5:
+                    strengthIndicator.classList.add('strength-strong');
+                    feedback = 'Strong';
+                    break;
+            }
+            
+            strengthText.textContent = password.length > 0 ? `Password Strength: ${feedback}` : '';
+            strengthText.className = 'password-strength-text';
+            if (password.length > 0) {
+                strengthText.classList.add(strengthIndicator.classList[1]); // Add strength class
+            }
+            
+            return score;
+        }
+        
+        // Password requirements checker
+        function checkPasswordRequirements(password) {
+            const requirements = {
+                lengthReq: password.length >= 8,
+                uppercaseReq: /[A-Z]/.test(password),
+                lowercaseReq: /[a-z]/.test(password),
+                numberReq: /\d/.test(password),
+                specialReq: /[^a-zA-Z\d]/.test(password)
+            };
+            
+            Object.keys(requirements).forEach(reqId => {
+                const element = document.getElementById(reqId);
+                const icon = element.querySelector('i');
+                
+                if (requirements[reqId]) {
+                    element.classList.remove('invalid');
+                    element.classList.add('valid');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-check');
+                } else {
+                    element.classList.remove('valid');
+                    element.classList.add('invalid');
+                    icon.classList.remove('fa-check');
+                    icon.classList.add('fa-times');
+                }
+            });
+            
+            return Object.values(requirements).every(req => req);
+        }
+        
+        // Password match checker
+        function checkPasswordMatch() {
+            const password = passwordField.value;
+            const confirmPassword = confirmPasswordField.value;
+            const matchDiv = document.getElementById('passwordMatch');
+            
+            if (confirmPassword === '') {
+                matchDiv.textContent = '';
+                matchDiv.className = 'password-match';
+                return true;
+            }
+            
+            if (password === confirmPassword) {
+                matchDiv.textContent = '✓ Passwords match';
+                matchDiv.className = 'password-match valid';
+                return true;
+            } else {
+                matchDiv.textContent = '✗ Passwords do not match';
+                matchDiv.className = 'password-match invalid';
+                return false;
+            }
+        }
+        
+        // Form validation
+        function validateForm() {
+            const username = usernameField.value.trim();
+            const email = emailField.value.trim();
+            const password = passwordField.value;
+            const confirmPassword = confirmPasswordField.value;
+            const termsAccepted = agreeTerms.checked;
+            
+            // Clear previous validation
+            [usernameField, emailField, passwordField, confirmPasswordField].forEach(field => {
+                field.classList.remove('is-valid', 'is-invalid');
+            });
+            
+            let isValid = true;
+            
+            // Username validation
+            if (!username) {
+                usernameField.classList.add('is-invalid');
+                isValid = false;
+            } else if (!/^[a-zA-Z][a-zA-Z0-9_-]*$/.test(username)) {
+                usernameField.classList.add('is-invalid');
+                isValid = false;
+            } else if (username.length < 3 || username.length > 30) {
+                usernameField.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                usernameField.classList.add('is-valid');
+            }
+            
+            // Email validation
+            if (!email) {
+                emailField.classList.add('is-invalid');
+                isValid = false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                emailField.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                emailField.classList.add('is-valid');
+            }
+            
+            // Password validation
+            const passwordValid = checkPasswordRequirements(password);
+            if (!password) {
+                passwordField.classList.add('is-invalid');
+                isValid = false;
+            } else if (!passwordValid) {
+                passwordField.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                passwordField.classList.add('is-valid');
+            }
+            
+            // Confirm password validation
+            const passwordsMatch = checkPasswordMatch();
+            if (!confirmPassword) {
+                confirmPasswordField.classList.add('is-invalid');
+                isValid = false;
+            } else if (!passwordsMatch) {
+                confirmPasswordField.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                confirmPasswordField.classList.add('is-valid');
+            }
+            
+            // Terms validation
+            if (!termsAccepted) {
+                isValid = false;
+            }
+            
+            // Enable/disable submit button
+            submitBtn.disabled = !isValid;
+            submitBtn.style.opacity = isValid ? '1' : '0.6';
+            submitBtn.style.cursor = isValid ? 'pointer' : 'not-allowed';
+            
+            return isValid;
+        }
+        
+        // Event listeners
+        passwordField.addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+            checkPasswordRequirements(this.value);
+            validateForm();
+        });
+        
+        confirmPasswordField.addEventListener('input', function() {
+            checkPasswordMatch();
+            validateForm();
+        });
+        
+        usernameField.addEventListener('input', validateForm);
+        emailField.addEventListener('input', validateForm);
+        agreeTerms.addEventListener('change', validateForm);
+        
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            if (!validateForm()) {
+                e.preventDefault();
+                alert('Please correct the errors in the form before submitting.');
+                return false;
+            }
+        });
+        
+        // Initial validation
+        validateForm();
+    });
+</script>
+{% endblock %}

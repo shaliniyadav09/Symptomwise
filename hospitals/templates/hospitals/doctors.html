@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manage Doctors - {{ hospital.name }} - SymptomWise{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hospital-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 2rem 0;
+        margin-top: -76px;
+        padding-top: calc(2rem + 76px);
+    }
+    
+    .hospital-nav {
+        background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 1rem 0;
+        margin-bottom: 2rem;
+    }
+    
+    .hospital-nav .nav-link {
+        color: var(--primary-color);
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        margin: 0 0.25rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .hospital-nav .nav-link:hover,
+    .hospital-nav .nav-link.active {
+        background: var(--primary-color);
+        color: white;
+    }
+    
+    .doctor-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .doctor-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    
+    .action-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 10px;
+        text-decoration: none;
+        display: inline-block;
+        margin: 0.25rem;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+    
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,119,182,0.3);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hospital Header -->
+<div class="hospital-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="mb-2">
+                    <i class="fas fa-user-md me-3"></i>Manage Doctors
+                </h1>
+                <p class="mb-0 opacity-90">{{ hospital.name }} - Doctor Management</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'hospitals:add_doctor' %}" class="btn btn-light">
+                    <i class="fas fa-plus me-2"></i>Add New Doctor
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Navigation -->
+<div class="hospital-nav">
+    <div class="container">
+        <nav class="nav">
+            <a class="nav-link" href="{% url 'hospitals:dashboard' %}">
+                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+            </a>
+            <a class="nav-link active" href="{% url 'hospitals:doctors' %}">
+                <i class="fas fa-user-md me-2"></i>Manage Doctors
+            </a>
+            <a class="nav-link" href="{% url 'hospitals:appointments' %}">
+                <i class="fas fa-calendar-alt me-2"></i>Appointments
+            </a>
+            <a class="nav-link" href="{% url 'hospitals:categories' %}">
+                <i class="fas fa-tags me-2"></i>Categories
+            </a>
+            <a class="nav-link" href="{% url 'hospitals:logout' %}">
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+            </a>
+        </nav>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Quick Actions -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="text-primary mb-3">
+                <i class="fas fa-bolt me-2"></i>Quick Actions
+            </h5>
+            <div class="d-flex flex-wrap">
+            <a href="{% url 'hospitals:add_doctor' %}" class="action-btn">
+                <i class="fas fa-user-plus me-2"></i>Add New Doctor
+            </a>
+            <a href="{% url 'hospitals:add_category' %}" class="action-btn">
+                <i class="fas fa-plus me-2"></i>Add Category
+            </a>
+            <a href="{% url 'hospitals:categories' %}" class="action-btn">
+                <i class="fas fa-list me-2"></i>Manage Categories
+            </a>
+        </div>
+    </div>
+    
+    <!-- Doctors List -->
+    {% if doctors %}
+        <div class="row">
+            {% for doctor in doctors %}
+                <div class="col-lg-6 mb-4">
+                    <div class="doctor-card">
+                        <div class="row align-items-center">
+                            <div class="col-md-3 text-center">
+                                {% if doctor.profile_image %}
+                                    <img src="{{ doctor.profile_image.url }}" alt="{{ doctor.full_name }}" 
+                                         class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
+                                {% else %}
+                                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                         style="width: 80px; height: 80px;">
+                                        <i class="fas fa-user-md fa-2x"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-9">
+                                <h5 class="text-primary mb-1"> {{ doctor.full_name }}</h5>
+                                <p class="text-muted mb-2">{{ doctor.category.name|default:"General Medicine" }}</p>
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-clock text-muted me-2"></i>
+                                    <small class="text-muted">Experience: {{ doctor.experience_years|default:"5" }} years</small>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        {% if doctor.is_available %}
+                                            <span class="badge bg-success">Available</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Unavailable</span>
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <a href="{% url 'hospitals:edit_doctor' doctor.id %}" class="btn btn-outline-primary btn-sm me-1">
+                                            <i class="fas fa-edit me-1"></i>Edit
+                                        </a>
+                                        <a href="{% url 'hospitals:manage_doctor_availability' doctor.id %}" class="btn btn-outline-info btn-sm me-1">
+                                            <i class="fas fa-calendar-alt me-1"></i>Schedule
+                                        </a>
+                                        <a href="{% url 'hospitals:delete_doctor' doctor.id %}" class="btn btn-outline-danger btn-sm" 
+                                           onclick="return confirm('Are you sure you want to delete Dr. {{ doctor.full_name }}?')">
+                                            <i class="fas fa-trash me-1"></i>Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <div class="card">
+                <div class="card-body py-5">
+                    <i class="fas fa-user-md fa-4x text-muted mb-4"></i>
+                    <h3 class="text-muted mb-3">No Doctors Added Yet</h3>
+                    <p class="text-muted mb-4">Start building your medical team by adding qualified doctors to your hospital.</p>
+                    <a href="{% url 'hospitals:add_doctor' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-plus me-2"></i>Add Your First Doctor
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

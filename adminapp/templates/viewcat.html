@@ -1,0 +1,38 @@
+{% extends 'adminbase.html' %}
+{% load static %}
+{% block admin %}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card p-4">
+            <div class="table-responsive">
+                <table class="table table-bordered  table-hover text-center">
+                    <thead >
+                        <tr>
+                            <th>S.No.</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in cats %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ i.name }}</td>
+                            <td>{{ i.description }}</td>
+                            
+                             <td>
+                                <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,318 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register Hospital - SymptomWise{% endblock %}
+
+{% block extra_css %}
+<style>
+    .register-container {
+        background: #ffffff;
+        min-height: calc(100vh - 76px);
+        display: flex;
+        align-items: center;
+        padding: 2rem 0;
+    }
+    
+    .register-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        overflow: hidden;
+    }
+    
+    .register-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+    }
+    
+    .register-icon {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .register-form {
+        padding: 2.5rem;
+    }
+    
+    .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .form-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+    
+    .section-title {
+        color: var(--primary-color);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--primary-color);
+        display: inline-block;
+    }
+    
+    .register-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border: none;
+        border-radius: 12px;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .register-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 119, 182, 0.3);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="register-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="register-card">
+                    <div class="register-header">
+                        <div class="register-icon">
+                            <i class="fas fa-hospital fa-2x"></i>
+                        </div>
+                        <h2 class="mb-2">Register Your Hospital</h2>
+                        <p class="mb-0">Join the SymptomWise healthcare network</p>
+                    </div>
+                    
+                    <div class="register-form">
+                        <form method="post" id="hospitalRegisterForm">
+                            {% csrf_token %}
+                            
+                            <!-- Hospital Information -->
+                            <div class="form-section">
+                                <h4 class="section-title">
+                                    <i class="fas fa-hospital me-2"></i>Hospital Information
+                                </h4>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Hospital Name <span class="text-danger">*</span></label>
+                                        <input type="text" name="hospital_name" class="form-control" required 
+                                               placeholder="Enter hospital name">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Email <span class="text-danger">*</span></label>
+                                        <input type="email" name="email" class="form-control" required 
+                                               placeholder="hospital@example.com">
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Phone <span class="text-danger">*</span></label>
+                                        <input type="tel" name="phone" class="form-control" required 
+                                               placeholder="+91 9876543210">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Website</label>
+                                        <input type="url" name="website" class="form-control" 
+                                               placeholder="https://www.hospital.com">
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Address <span class="text-danger">*</span></label>
+                                    <textarea name="address" class="form-control" rows="3" required 
+                                              placeholder="Enter complete hospital address"></textarea>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">City <span class="text-danger">*</span></label>
+                                        <input type="text" name="city" class="form-control" required 
+                                               placeholder="City">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">State <span class="text-danger">*</span></label>
+                                        <input type="text" name="state" class="form-control" required 
+                                               placeholder="State">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Postal Code <span class="text-danger">*</span></label>
+                                        <input type="text" name="postal_code" class="form-control" required 
+                                               placeholder="123456">
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Country</label>
+                                    <select name="country" class="form-select">
+                                        <option value="India" selected>India</option>
+                                        <option value="USA">United States</option>
+                                        <option value="UK">United Kingdom</option>
+                                        <option value="Canada">Canada</option>
+                                        <option value="Australia">Australia</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Website (Optional)</label>
+                                    <input type="url" name="website" class="form-control" 
+                                           placeholder="https://www.hospital.com">
+                                </div>
+                            </div>
+                            
+                            <!-- Admin Account -->
+                            <div class="form-section">
+                                <h4 class="section-title">
+                                    <i class="fas fa-user-shield me-2"></i>Admin Account
+                                </h4>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Admin Username <span class="text-danger">*</span></label>
+                                        <input type="text" name="admin_username" class="form-control" required 
+                                               placeholder="admin_username"
+                                               pattern="^[a-zA-Z][a-zA-Z0-9_-]*$"
+                                               title="Username must start with a letter and contain only letters, numbers, underscore, and hyphen"
+                                               minlength="3" maxlength="30">
+                                        <div class="form-text">This will be used to login to hospital dashboard</div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Admin Email <span class="text-danger">*</span></label>
+                                        <input type="email" name="admin_email" class="form-control" required 
+                                               placeholder="admin@hospital.com">
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Admin Password <span class="text-danger">*</span></label>
+                                    <input type="password" name="admin_password" class="form-control" required 
+                                           placeholder="Create a strong password"
+                                           minlength="8"
+                                           pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$"
+                                           title="Password must be at least 8 characters with uppercase, lowercase, number, and special character">
+                                    <div class="form-text">Password must contain uppercase, lowercase, number, and special character</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Terms and Submit -->
+                            <div class="form-check mb-4">
+                                <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                                <label class="form-check-label" for="agreeTerms">
+                                    I agree to the <a href="#" class="text-primary">Terms of Service</a> and 
+                                    <a href="#" class="text-primary">Privacy Policy</a>
+                                </label>
+                            </div>
+                            
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-lg w-100" style="background: #212C3F; border: none; color: white;">
+                                    Register Hospital
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <div class="text-center mt-4">
+                            <p class="text-muted">
+                                Already have a hospital account? 
+                                <a href="{% url 'hospitals:login' %}" class="text-primary text-decoration-none">
+                                    Login here
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/form-validation.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Enhanced form validation
+        const form = document.getElementById('hospitalRegisterForm');
+        const usernameField = document.querySelector('input[name="admin_username"]');
+        const passwordField = document.querySelector('input[name="admin_password"]');
+        
+        // Custom validation messages
+        usernameField.addEventListener('invalid', function(e) {
+            if (this.validity.patternMismatch) {
+                this.setCustomValidity('Username must start with a letter and contain only letters, numbers, underscore, and hyphen');
+            } else if (this.validity.tooShort) {
+                this.setCustomValidity('Username must be at least 3 characters long');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+        
+        passwordField.addEventListener('invalid', function(e) {
+            if (this.validity.patternMismatch) {
+                this.setCustomValidity('Password must contain uppercase, lowercase, number, and special character');
+            } else if (this.validity.tooShort) {
+                this.setCustomValidity('Password must be at least 8 characters long');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+        
+        // Clear custom validity on input
+        usernameField.addEventListener('input', function() {
+            this.setCustomValidity('');
+        });
+        
+        passwordField.addEventListener('input', function() {
+            this.setCustomValidity('');
+        });
+        
+        // Enhanced form submission validation
+        form.addEventListener('submit', function(e) {
+            const username = usernameField.value;
+            const password = passwordField.value;
+            
+            // Username validation
+            if (!/^[a-zA-Z]/.test(username)) {
+                e.preventDefault();
+                usernameField.focus();
+                alert('Username must start with a letter');
+                return false;
+            }
+            
+            if (!/^[a-zA-Z][a-zA-Z0-9_-]*$/.test(username)) {
+                e.preventDefault();
+                usernameField.focus();
+                alert('Username can only contain letters, numbers, underscore, and hyphen');
+                return false;
+            }
+            
+            // Password validation
+            if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$/.test(password)) {
+                e.preventDefault();
+                passwordField.focus();
+                alert('Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character');
+                return false;
+            }
+        });
+    });
+</script>
+{% endblock %}

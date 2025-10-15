@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Appointments</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .nav { margin-bottom: 20px; }
+        .nav a { margin-right: 15px; text-decoration: none; color: #007bff; }
+        .appointment { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/userdashboard/">Dashboard</a>
+        <a href="/appointment/">Book New</a>
+    </div>
+    
+    <h2>My Appointments</h2>
+    
+    {% if appointments %}
+        {% for appointment in appointments %}
+            <div class="appointment">
+                <h4>{{ appointment.doctor }}</h4>
+                <p>Date: {{ appointment.date }}</p>
+                <p>Time: {{ appointment.time }}</p>
+                <p>Status: {{ appointment.status }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No appointments found.</p>
+        <a href="/appointment/">Book your first appointment</a>
+    {% endif %}
+</body>
+</html>

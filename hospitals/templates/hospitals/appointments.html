@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Appointments - {{ hospital.name }} - SymptomWise{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hospital-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 2rem 0;
+        margin-top: -76px;
+        padding-top: calc(2rem + 76px);
+    }
+    
+    .hospital-nav {
+        background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 1rem 0;
+        margin-bottom: 2rem;
+    }
+    
+    .hospital-nav .nav-link {
+        color: var(--primary-color);
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        margin: 0 0.25rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .hospital-nav .nav-link:hover,
+    .hospital-nav .nav-link.active {
+        background: var(--primary-color);
+        color: white;
+    }
+    
+    .appointment-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+        border-left: 4px solid var(--primary-color);
+    }
+    
+    .appointment-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    
+    .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.85rem;
+    }
+    
+    .status-scheduled { background: #e3f2fd; color: #1976d2; }
+    .status-confirmed { background: #e8f5e8; color: #2e7d32; }
+    .status-completed { background: #f3e5f5; color: #7b1fa2; }
+    .status-cancelled { background: #ffebee; color: #c62828; }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hospital Header -->
+<div class="hospital-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="mb-2">
+                    <i class="fas fa-calendar-alt me-3"></i>Appointments
+                </h1>
+                <p class="mb-0 opacity-90">{{ hospital.name }} - Appointment Management</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <div class="d-flex align-items-center justify-content-md-end">
+                    <span class="badge bg-light text-dark me-2">Total: {{ appointments.count }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Navigation -->
+<div class="hospital-nav">
+    <div class="container">
+        <nav class="nav">
+            <a class="nav-link" href="{% url 'hospitals:dashboard' %}">
+                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+            </a>
+            <a class="nav-link" href="{% url 'hospitals:doctors' %}">
+                <i class="fas fa-user-md me-2"></i>Manage Doctors
+            </a>
+            <a class="nav-link active" href="{% url 'hospitals:appointments' %}">
+                <i class="fas fa-calendar-alt me-2"></i>Appointments
+            </a>
+            <a class="nav-link" href="{% url 'hospitals:categories' %}">
+                <i class="fas fa-tags me-2"></i>Categories
+            </a>
+            <a class="nav-link" href="{% url 'hospitals:logout' %}">
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+            </a>
+        </nav>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Filter Options -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="text-primary mb-3">
+                <i class="fas fa-filter me-2"></i>Filter Appointments
+            </h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="btn-group" role="group">
+                        <a href="{% url 'hospitals:appointments' %}" 
+                           class="btn {% if not status_filter %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                            All
+                        </a>
+                        <a href="{% url 'hospitals:appointments' %}?status=scheduled" 
+                           class="btn {% if status_filter == 'scheduled' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                            Scheduled
+                        </a>
+                        <a href="{% url 'hospitals:appointments' %}?status=confirmed" 
+                           class="btn {% if status_filter == 'confirmed' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                            Confirmed
+                        </a>
+                        <a href="{% url 'hospitals:appointments' %}?status=completed" 
+                           class="btn {% if status_filter == 'completed' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                            Completed
+                        </a>
+                        <a href="{% url 'hospitals:appointments' %}?status=cancelled" 
+                           class="btn {% if status_filter == 'cancelled' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                            Cancelled
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="{% url 'hospitals:dashboard' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Appointments List -->
+    {% if appointments %}
+        {% for appointment in appointments %}
+            <div class="appointment-card">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <div class="d-flex align-items-center mb-2">
+                            <h5 class="text-primary mb-0 me-3">{{ appointment.first_name }} {{ appointment.last_name }}</h5>
+                            <span class="status-badge status-{{ appointment.status }}">{{ appointment.status|title }}</span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="mb-1">
+                                    <i class="fas fa-calendar text-muted me-2"></i>
+                                    <strong>Date:</strong> {{ appointment.appointment_date }}
+                                </p>
+                                <p class="mb-1">
+                                    <i class="fas fa-clock text-muted me-2"></i>
+                                    <strong>Time:</strong> {{ appointment.appointment_time }}
+                                </p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p class="mb-1">
+                                    <i class="fas fa-user-md text-muted me-2"></i>
+                                    <strong>Doctor:</strong>  {{ appointment.doctor.full_name|default:"Not Assigned" }}
+                                </p>
+                                <p class="mb-1">
+                                    <i class="fas fa-phone text-muted me-2"></i>
+                                    <strong>Phone:</strong> {{ appointment.phone }}
+                                </p>
+                            </div>
+                        </div>
+                        
+                        {% if appointment.reason %}
+                            <p class="mb-0 mt-2">
+                                <i class="fas fa-notes-medical text-muted me-2"></i>
+                                <strong>Reason:</strong> {{ appointment.reason }}
+                            </p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-4 text-md-end">
+                        <div class="mb-2">
+                            <small class="text-muted">Appointment ID</small><br>
+                            <strong>{{ appointment.appointment_id }}</strong>
+                        </div>
+                        
+                        {% if appointment.consultation_fee %}
+                            <div class="mb-2">
+                                <small class="text-muted">Fee</small><br>
+                                <strong>₹{{ appointment.consultation_fee }}</strong>
+                            </div>
+                        {% endif %}
+                        
+                        <div>
+                            <span class="badge bg-info">ID: {{ appointment.appointment_id }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        
+        <!-- Pagination would go here if needed -->
+        
+    {% else %}
+        <div class="text-center py-5">
+            <div class="card">
+                <div class="card-body py-5">
+                    <i class="fas fa-calendar-alt fa-4x text-muted mb-4"></i>
+                    <h3 class="text-muted mb-3">No Appointments Found</h3>
+                    {% if status_filter %}
+                        <p class="text-muted mb-4">No appointments with status "{{ status_filter }}" found.</p>
+                        <a href="{% url 'hospitals:appointments' %}" class="btn btn-primary">
+                            <i class="fas fa-list me-2"></i>View All Appointments
+                        </a>
+                    {% else %}
+                        <p class="text-muted mb-4">Patients haven't booked any appointments yet. Share your hospital information to start receiving bookings.</p>
+                        <div class="d-flex gap-2 justify-content-center">
+                            <a href="{% url 'hospitals:list' %}" class="btn btn-primary">
+                                <i class="fas fa-hospital me-2"></i>View Hospital Directory
+                            </a>
+                            <a href="{% url 'hospitals:dashboard' %}" class="btn btn-outline-primary">
+                                <i class="fas fa-tachometer-alt me-2"></i>Back to Dashboard
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

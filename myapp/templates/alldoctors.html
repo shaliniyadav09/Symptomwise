@@ -1,0 +1,329 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+/* Doctor Cards Mobile-First Responsive Design */
+.doctor-card {
+  transition: all 0.3s ease;
+}
+
+.doctor-card .card {
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: white;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.doctor-card .card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+  border-color: #2563eb;
+}
+
+/* Doctor Image Container */
+.doctor-card .card .p-3 {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-radius: 16px 16px 0 0;
+  transition: all 0.3s ease;
+}
+
+.doctor-card .card:hover .p-3 {
+  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+}
+
+/* Doctor Image - Default positioning for desktop */
+.doctor-card .card img {
+  transition: transform 0.3s ease;
+  border-radius: 12px;
+  object-fit: cover;
+  object-position: center top; /* Desktop: crop from top */
+}
+
+.doctor-card .card:hover img {
+  transform: scale(1.05);
+}
+
+/* Doctor Info */
+.doctor-card .card-body {
+  background: white;
+  padding: 1.5rem;
+}
+
+.doctor-card .card-title {
+  color: #1e293b;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.doctor-card .specialization {
+  color: #2563eb;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.doctor-card .experience {
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 1rem;
+}
+
+/* Action Buttons */
+.doctor-card .btn {
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  padding: 0.5rem 1rem;
+  font-size: 14px;
+  margin: 0 2px;
+}
+
+.doctor-card .btn-outline-primary {
+  border: 1px solid #0077b6;
+  color: #0077b6;
+  background: transparent;
+}
+
+.doctor-card .btn-outline-primary:hover {
+  background: #0077b6;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 119, 182, 0.2);
+}
+
+.doctor-card .btn-success {
+  background: #059669;
+  border-color: #059669;
+  color: white;
+}
+
+.doctor-card .btn-success:hover {
+  background: #047857;
+  border-color: #047857;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+}
+
+/* Section Title */
+.section-title {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 3rem;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  border-radius: 2px;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  /* Mobile: Change image positioning to crop from bottom */
+  .doctor-card .card img {
+    object-position: center bottom; /* Mobile: crop from bottom to show faces */
+  }
+  
+  .doctor-card .col-sm-6 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .doctor-card .card-body {
+    padding: 1rem;
+  }
+  
+  .doctor-card .card-title {
+    font-size: 1rem;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+  }
+  
+  /* Mobile button adjustments */
+  .doctor-card .btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 12px;
+    margin: 2px 1px;
+  }
+  
+  /* Stack buttons vertically on very small screens */
+  .doctor-card .d-flex.gap-2 {
+    flex-direction: column;
+    gap: 8px !important;
+  }
+  
+  .doctor-card .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Very small screens - ensure single column */
+  .doctor-card .col-sm-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  
+  .doctor-card .card-body {
+    padding: 0.8rem;
+  }
+  
+  .doctor-card .card-title {
+    font-size: 0.9rem;
+  }
+  
+  .doctor-card .specialization {
+    font-size: 12px;
+  }
+  
+  .doctor-card .experience {
+    font-size: 11px;
+  }
+}
+
+/* Grid Layout Improvements */
+.row.g-4 {
+  margin: 0 -12px;
+}
+
+.row.g-4 > [class*="col-"] {
+  padding: 12px;
+}
+
+/* Card Hover Effects Enhancement */
+.doctor-card .card {
+  position: relative;
+  z-index: 1;
+}
+
+.doctor-card .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.02), rgba(59, 130, 246, 0.02));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 16px;
+  z-index: -1;
+}
+
+.doctor-card .card:hover::before {
+  opacity: 1;
+}
+
+/* Image Loading State */
+.doctor-card .card img {
+  background: #f1f5f9;
+}
+
+.doctor-card .card img[src*="default"] {
+  filter: grayscale(0.2);
+  opacity: 0.8;
+}
+
+/* Empty State Styling */
+.empty-state {
+  background: #f8fafc;
+  border-radius: 16px;
+  border: 2px dashed #cbd5e1;
+  padding: 3rem;
+  text-align: center;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  color: #cbd5e1;
+  margin-bottom: 1rem;
+}
+
+.empty-state h4 {
+  color: #64748b;
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  color: #94a3b8;
+  margin-bottom: 1.5rem;
+}
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="container py-5">
+  <div class="text-center mb-5">
+      <h2 class="section-title">All Available Doctors</h2>
+      <p class="text-secondary">Browse our full list of qualified healthcare professionals.</p>
+  </div>
+  
+  <div class="row g-4">
+    {% for b in doctors %}
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="doctor-card h-100">
+        
+        {% if b.id %}
+          <a href="{% url 'doctor_list' b.id %}" style="text-decoration:none; color:inherit;">
+        {% endif %}
+
+          <div class="card shadow-sm border-0 rounded-4 h-100 text-center">
+            <div class="p-3" style="background-color:#f0f4f8;">
+              {% if b.profile_image and b.profile_image.url %}
+                <img src="{{ b.profile_image.url }}" alt="{{ b.first_name }}" class="img-fluid rounded-3" style="height:250px; width:100%; object-fit:cover;">
+              {% else %}
+                <img src="{% static 'images/default-doctor.png' %}" alt="Default Doctor" class="img-fluid rounded-3" style="height:250px; width:100%; object-fit:cover;">
+              {% endif %}
+            </div>
+            <div class="card-body">
+              <h5 class="fw-bold mb-1">{{ b.title }} {{ b.first_name }} {{ b.last_name }}</h5>
+              <p class="mb-1 text-primary fw-bold" style="font-size:14px;">
+                {{ b.category.name|default:"Specialist" }}
+              </p>
+              <p class="mb-2 text-muted" style="font-size:13px;">
+                Exp: {{ b.experience_years|default:"N/A" }} yrs
+              </p>
+              <div class="mt-auto d-flex justify-content-center gap-2">
+            <a href="{% url 'doctor_list' b.id %}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+              View Profile
+            </a>
+            
+            <a href="{% url 'appointment' %}?doctor={{ b.id }}&hospital={{ b.hospital.id }}" class="btn btn-sm btn-success rounded-pill px-3">
+              <i class="fas fa-calendar-check me-1"></i> Book
+            </a>
+          </div>
+            </div>
+          </div>
+        
+        {% if b.id %}
+          </a>
+        {% endif %}
+
+      </div>
+    </div>
+    {% empty %}
+      <div class="col-12">
+        <div class="empty-state">
+          <i class="fas fa-user-md"></i>
+          <h4>No Doctors Available</h4>
+          <p>We're currently updating our doctor listings. Please check back soon or contact us for assistance.</p>
+          <a href="{% url 'contact' %}" class="btn btn-primary">Contact Us</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

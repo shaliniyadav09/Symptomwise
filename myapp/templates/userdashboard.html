@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - SymptomWise{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Welcome Section -->
+    <div class="dashboard-card">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h2 class="mb-2">
+                    <i class="fas fa-user-circle me-2"></i>
+                    Welcome, {{ user.first_name|default:user.username }}!
+                </h2>
+                <p class="mb-0">Manage your appointments and access healthcare services.</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <i class="fas fa-heartbeat fa-3x opacity-50"></i>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Stats -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ hospitals.count|default:"0" }}</div>
+                <div class="stat-label">Hospitals Available</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ doctors.count|default:"0" }}</div>
+                <div class="stat-label">Doctors Available</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Support Available</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card">
+                <div class="stat-number">AI</div>
+                <div class="stat-label">Chatbot Ready</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3 mb-3">
+                            <a href="/chatbot/" class="btn btn-primary w-100 py-3">
+                                <i class="fas fa-robot fa-2x d-block mb-2"></i>
+                                <strong>AI Chatbot</strong>
+                                <small class="d-block">Get medical guidance</small>
+                            </a>
+                        </div>
+                        <div class="col-md-6 col-lg-3 mb-3">
+                            <a href="{% url 'appointment' %}" class="btn btn-success w-100 py-3">
+                                <i class="fas fa-calendar-plus fa-2x d-block mb-2"></i>
+                                <strong>Book Appointment</strong>
+                                <small class="d-block">Schedule with doctors</small>
+                            </a>
+                        </div>
+                        <div class="col-md-6 col-lg-3 mb-3">
+                            <a href="/hospitals/" class="btn btn-info w-100 py-3">
+                                <i class="fas fa-hospital fa-2x d-block mb-2"></i>
+                                <strong>Hospital Directory</strong>
+                                <small class="d-block">Browse registered hospitals</small>
+                            </a>
+                        </div>
+                        <div class="col-md-6 col-lg-3 mb-3">
+                            <a href="/userprofile/" class="btn btn-outline-primary w-100 py-3">
+                                <i class="fas fa-user-edit fa-2x d-block mb-2"></i>
+                                <strong>My Profile</strong>
+                                <small class="d-block">Update your information</small>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Appointments / Available Hospitals -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>My Appointments</h6>
+                    <span class="badge bg-primary">{{ appointments_count }}</span>
+                </div>
+                <div class="card-body">
+                    {% if appointments %}
+                        {% for appointment in appointments %}
+                            <div class="appointment-item border-bottom pb-3 mb-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">{{ appointment.doctor.full_name }}</h6>
+                                        <p class="text-muted mb-1">{{ appointment.doctor.category.name }}</p>
+                                        <small class="text-muted">
+                                            <i class="fas fa-calendar me-1"></i>{{ appointment.appointment_date|date:"M d, Y" }}
+                                            <i class="fas fa-clock ms-2 me-1"></i>{{ appointment.appointment_time|time:"g:i A" }}
+                                        </small>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge bg-{% if appointment.status == 'scheduled' %}warning{% elif appointment.status == 'confirmed' %}success{% elif appointment.status == 'cancelled' %}danger{% else %}secondary{% endif %} mb-2">
+                                            {{ appointment.get_status_display }}
+                                        </span>
+                                        <div class="btn-group-vertical btn-group-sm">
+                                            {% if appointment.status == 'scheduled' or appointment.status == 'confirmed' %}
+                                                <a href="{% url 'cancel_appointment' appointment.appointment_id %}" class="btn btn-outline-danger btn-sm">
+                                                    <i class="fas fa-times"></i> Cancel
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="text-center mt-3">
+                            <a href="{% url 'view_appointments' %}" class="btn btn-sm btn-primary">View All Appointments</a>
+                        </div>
+                    {% else %}
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-calendar-alt fa-3x mb-3 opacity-50"></i>
+                            <p>No appointments yet</p>
+                            <a href="{% url 'appointment' %}" class="btn btn-sm btn-primary">Book Your First Appointment</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="fas fa-hospital me-2"></i>Available Hospitals</h6>
+                </div>
+                <div class="card-body">
+                    {% if hospitals %}
+                        {% for hospital in hospitals %}
+                            <div class="d-flex align-items-center mb-3 p-2 bg-light rounded">
+                                <div class="me-3">
+                                    <i class="fas fa-hospital text-primary fa-lg"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">{{ hospital.name }}</h6>
+                                    <small class="text-muted">{{ hospital.city }}, {{ hospital.state }}</small>
+                                </div>
+                                <div>
+                                    <a href="/hospitals/{{ hospital.id }}/" class="btn btn-sm btn-outline-primary">View</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="text-center mt-3">
+                            <a href="/hospitals/" class="btn btn-sm btn-primary">View All Hospitals</a>
+                        </div>
+                    {% else %}
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-hospital fa-3x mb-3 opacity-50"></i>
+                            <p>No hospitals registered yet</p>
+                            <a href="/hospitals/register/" class="btn btn-sm btn-primary">Register Hospital</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Available Services -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="fas fa-stethoscope me-2"></i>Available Services</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    General Consultation
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    Specialist Appointments
+                                </li>
+                                <li class="mb-0">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    AI-Powered Health Guidance
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    24/7 Emergency Support
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    Multi-Hospital Network
+                                </li>
+                                <li class="mb-0">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    SymptomWise AI Integration
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

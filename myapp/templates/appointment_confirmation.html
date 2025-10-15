@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Appointment Confirmation - SymptomWise{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            {% if success and appointment %}
+            <div class="card border-0 shadow-sm" style="border-radius: 16px;">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                        <h2 class="text-success mt-3 mb-2">Appointment Confirmed!</h2>
+                        <p class="text-muted">{{ message }}</p>
+                    </div>
+                    
+                    <!-- Appointment Details -->
+                    <div class="appointment-details bg-light p-4 rounded mb-4">
+                        <h4 class="mb-3"><i class="fas fa-calendar-check me-2"></i>Appointment Details</h4>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <strong>Appointment ID:</strong><br>
+                                <span class="text-primary">{{ appointment.appointment_id }}</span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Patient:</strong><br>
+                                {{ appointment.patient_full_name }}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <strong>Doctor:</strong><br>
+                                {{ appointment.doctor.full_name }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Specialty:</strong><br>
+                                {{ appointment.doctor.category.name }}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <strong>Date & Time:</strong><br>
+                                {{ appointment.appointment_date|date:"F d, Y" }} at {{ appointment.appointment_time|time:"g:i A" }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Hospital:</strong><br>
+                                {{ appointment.hospital.name }}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <strong>Consultation Fee:</strong><br>
+                                ₹{{ appointment.consultation_fee }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Status:</strong><br>
+                                <span class="badge bg-success">{{ appointment.get_status_display }}</span>
+                            </div>
+                        </div>
+                        
+                        {% if appointment.reason %}
+                        <div class="mt-3">
+                            <strong>Reason for Visit:</strong><br>
+                            {{ appointment.reason }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Contact Information -->
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-info-circle me-2"></i>Important Information</h6>
+                        <ul class="mb-0">
+                            <li>Please arrive 15 minutes before your appointment time</li>
+                            <li>Bring a valid ID and any relevant medical records</li>
+                            <li>Contact the hospital if you need to reschedule</li>
+                            <li>A confirmation email has been sent to {{ appointment.email }}</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="text-center">
+                        <a href="{% url 'userdashboard' %}" class="btn btn-primary me-2">
+                            <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                        </a>
+                        <a href="{% url 'appointment' %}" class="btn btn-outline-primary me-2">
+                            <i class="fas fa-calendar-plus me-2"></i>Book Another
+                        </a>
+                        <a href="{% url 'index' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-home me-2"></i>Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <!-- Error State -->
+            <div class="text-center">
+                <div class="mb-4">
+                    <i class="fas fa-exclamation-triangle text-warning" style="font-size: 4rem;"></i>
+                </div>
+                <h2 class="text-warning mb-3">Appointment Not Found</h2>
+                <p class="lead mb-4">{{ message }}</p>
+                
+                <div class="d-grid gap-2 d-md-block">
+                    <a href="{% url 'index' %}" class="btn btn-primary">
+                        <i class="fas fa-home me-2"></i>Back to Home
+                    </a>
+                    <a href="{% url 'appointment' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-calendar-plus me-2"></i>Book Appointment
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

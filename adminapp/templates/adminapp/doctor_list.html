@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doctors</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .doctor-card { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .doctor-name { font-size: 18px; font-weight: bold; color: #333; }
+        .doctor-info { color: #666; margin: 5px 0; }
+        .nav-links { margin: 20px 0; }
+        .nav-links a { margin-right: 15px; text-decoration: none; color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/chatbot/">Chatbot</a>
+        <a href="/hospitals/">Hospitals</a>
+        <a href="/admin/">Admin</a>
+    </div>
+    
+    <h1>Doctors Directory</h1>
+    
+    {% if doctors %}
+        {% for doctor in doctors %}
+            <div class="doctor-card">
+                <div class="doctor-name">Dr. {{ doctor.title }}</div>
+                {% if doctor.first_name and doctor.last_name %}
+                    <div class="doctor-info">{{ doctor.first_name }} {{ doctor.last_name }}</div>
+                {% endif %}
+                {% if doctor.specialty %}
+                    <div class="doctor-info">Specialty: {{ doctor.specialty }}</div>
+                {% endif %}
+                {% if doctor.experience_years %}
+                    <div class="doctor-info">Experience: {{ doctor.experience_years }} years</div>
+                {% endif %}
+                {% if doctor.consultation_fee %}
+                    <div class="doctor-info">Consultation Fee: ₹{{ doctor.consultation_fee }}</div>
+                {% endif %}
+                {% if doctor.phone %}
+                    <div class="doctor-info">Phone: {{ doctor.phone }}</div>
+                {% endif %}
+                {% if doctor.email %}
+                    <div class="doctor-info">Email: {{ doctor.email }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No doctors registered yet.</p>
+        <p><a href="/admin/">Go to Admin Panel</a> to add doctors.</p>
+    {% endif %}
+    
+    <div class="nav-links">
+        <a href="/admin/adminapp/doctor/add/">Add New Doctor (Admin)</a>
+    </div>
+</body>
+</html>

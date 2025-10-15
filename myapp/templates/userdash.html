@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Welcome, {{ user.name }}</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Profile Information</h5>
+                            <p><strong>Name:</strong> {{ user.name }}</p>
+                            <p><strong>Email:</strong> {{ user.email }}</p>
+                            <p><strong>Contact:</strong> {{ user.contactno }}</p>
+                            <p><strong>Address:</strong> {{ user.address }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Appointment History</h5>
+                            {% if appointments %}
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Appointment ID</th>
+                                            <th>Doctor</th>
+                                            <th>Date</th>
+                                            <th>Time</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for appointment in appointments %}
+                                        <tr>
+                                            <td>{{ appointment.appointment_id }}</td>
+                                            <td>{{ appointment.doctor.title }}</td>
+                                            <td>{{ appointment.appointment_date }}</td>
+                                            <td>{{ appointment.appointment_time }}</td>
+                                            <td><span class="badge bg-success">Confirmed</span></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <p>No appointments found.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

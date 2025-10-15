@@ -1,0 +1,27 @@
+/* Custom admin styles for appointment management */
+.status-badge {
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    color: white;
+    font-weight: bold;
+}
+
+.action-links a {
+    margin-right: 10px;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.action-links a:hover {
+    text-decoration: underline;
+}
+
+/* Status-specific colors */
+.status-scheduled { background-color: #ffc107; }
+.status-confirmed { background-color: #17a2b8; }
+.status-in-progress { background-color: #fd7e14; }
+.status-completed { background-color: #28a745; }
+.status-cancelled { background-color: #dc3545; }
+.status-no-show { background-color: #6c757d; }

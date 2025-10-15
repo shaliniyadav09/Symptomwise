@@ -1,0 +1,754 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Book Appointment - SymptomWise{% endblock %}
+
+{% block extra_css %}
+<style>
+    .appointment-form {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .section-title {
+        color: #2c3e50;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-section {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border-left: 4px solid #3498db;
+    }
+
+    /* --- FIX: Horizontal Scroll Container --- */
+    #doctorCardsContainer {
+        display: flex;
+        flex-wrap: nowrap; /* Prevents cards from wrapping */
+        overflow-x: auto; /* Enables horizontal scrolling */
+        padding-bottom: 10px; /* Space for the scrollbar */
+        /* Hides the scrollbar visually in some browsers, but keeps functionality */
+        scrollbar-width: thin;
+        scrollbar-color: #3498db #f1f1f1;
+    }
+    
+    /* FIX: Ensures each card maintains its size and spacing */
+    .doctor-card-wrapper {
+        flex: 0 0 250px; /* Fixed width for card (adjust as needed) */
+        min-width: 200px;
+        margin-right: 15px; /* Spacing between cards */
+        margin-bottom: 0.5rem;
+    }
+    /* --- END FIX: Horizontal Scroll Container --- */
+
+    .doctor-card {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 0.5rem; 
+        transition: all 0.3s ease;
+        cursor: pointer;
+        background: white;
+        min-height: 70px;
+        display: flex;
+        align-items: center;
+        height: 100%; /* Ensures all cards stretch within the row */
+    }
+
+    .doctor-card:hover {
+        border-color: #3498db;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.2);
+    }
+
+    .doctor-card.selected {
+        border-color: #3498db;
+        background: linear-gradient(135deg, #ebf3fd, #f0f8ff);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.25);
+    }
+
+    .doctor-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #ffffff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .doctor-card:hover .doctor-image {
+        border-color: #3498db;
+        box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        transform: scale(1.03);
+    }
+
+    .doctor-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .doctor-card:hover .doctor-image img {
+        transform: scale(1.1);
+    }
+
+    .doctor-initials {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .doctor-info {
+        padding-left: 0.5rem; 
+        flex-grow: 1;
+        /* Ensure content doesn't overflow horizontally */
+        overflow: hidden; 
+        min-width: 0;
+    }
+
+    .doctor-info h6 {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 0.1rem;
+        font-size: 0.85rem; 
+        line-height: 1.1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .doctor-specialty {
+        color: #3498db;
+        font-size: 0.7rem;
+        margin-bottom: 0.1rem;
+        font-weight: 500;
+    }
+
+    .doctor-experience {
+        color: #7f8c8d;
+        font-size: 0.65rem;
+        margin-bottom: 0.1rem;
+    }
+
+    .doctor-fee {
+        color: #27ae60;
+        font-weight: 600;
+        font-size: 0.7rem;
+        background: rgba(39, 174, 96, 0.1);
+        padding: 0.1rem 0.3rem; 
+        border-radius: 3px;
+        width: fit-content;
+        display: inline-block;
+    }
+
+    .form-control:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #2980b9, #1f4e79);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+    }
+
+    .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .alert-info {
+        background: #e8f4fd;
+        border-color: #3498db;
+        color: #2980b9;
+    }
+
+    .alert-success {
+        background: #d4edda;
+        border-color: #27ae60;
+        color: #155724;
+    }
+
+    .form-text {
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+
+    .invalid-feedback {
+        display: block;
+        color: #e74c3c;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .is-invalid {
+        border-color: #e74c3c;
+    }
+
+    .is-valid {
+        border-color: #27ae60;
+    }
+
+    /* Media queries adjustments for card wrapper */
+    @media (max-width: 768px) {
+        .doctor-card-wrapper {
+            flex: 0 0 45%; /* Show 2 cards on tablet/small screen with space */
+            min-width: 180px;
+        }
+        .doctor-card {
+            padding: 0.5rem; 
+            min-height: 65px;
+        }
+        .doctor-image {
+            width: 35px;
+            height: 35px;
+        }
+        .doctor-info h6 {
+            font-size: 0.8rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .doctor-card-wrapper {
+            flex: 0 0 65%; /* Show 1.5 cards on mobile */
+            min-width: 200px;
+        }
+    }
+
+    @keyframes cardPulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.01); }
+        100% { transform: scale(1); }
+    }
+
+    .doctor-card.selected {
+        animation: cardPulse 0.4s ease-in-out;
+    }
+
+    .loading-doctor-card {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+    }
+
+    @keyframes loading {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="appointment-form">
+                <div class="text-center mb-4">
+                    <h2 class="text-primary"><i class="fas fa-calendar-plus me-2"></i>Book Appointment</h2>
+                    <p class="text-muted">Schedule your appointment with our healthcare professionals</p>
+                </div>
+
+                <form method="post" action="/bookappointment/" id="appointmentForm" data-validate="true" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <div class="form-section">
+                        <h4 class="section-title"><i class="fas fa-hospital me-2"></i>Hospital & Doctor Selection</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Hospital <span class="text-danger">*</span></label>
+                                <select name="hospital" id="hospitalSelect" class="form-select" required onchange="loadDoctorsByHospital()">
+                                    {% if selected_hospital %}
+                                        <option value="{{ selected_hospital.id }}" selected>{{ selected_hospital.name }}</option>
+                                    {% else %}
+                                        <option value="">Select Hospital</option>
+                                        {% for hospital in hospitals %}
+                                            <option value="{{ hospital.id }}" {% if selected_hospital and hospital.id == selected_hospital.id %}selected{% endif %}>{{ hospital.name }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                                {% if selected_hospital %}
+                                <div class="form-text text-success">
+                                    <i class="fas fa-check-circle me-1"></i>{{ selected_hospital.name }} is pre-selected
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Doctor <span class="text-danger">*</span></label>
+                                <select name="doctor" id="doctorSelect" class="form-select" required onchange="updateHospitalFromDoctor()">
+                                    {% if selected_doctor %}
+                                        <option value="{{ selected_doctor.id }}" selected data-hospital="{{ selected_doctor.hospital.id }}">{{ selected_doctor.full_name }}</option>
+                                    {% else %}
+                                        <option value="">Select Doctor</option>
+                                        {% for doctor in doctors %}
+                                            <option value="{{ doctor.id }}" data-hospital="{{ doctor.hospital.id }}" {% if selected_doctor and doctor.id == selected_doctor.id %}selected{% endif %}>{{ doctor.full_name }} - {{ doctor.category.name|default:"General Medicine" }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                                {% if selected_doctor %}
+                                <div class="form-text text-success">
+                                    <i class="fas fa-check-circle me-1"></i>{{ selected_doctor.full_name }} is pre-selected
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="doctorCardsSection" class="form-section" style='{% if not show_doctor_cards %}display: none;{% endif %}'>
+                        <h4 class="section-title"><i class="fas fa-user-md me-2"></i>Available Doctors <span id="hospitalNameDisplay">{% if selected_hospital %}at {{ selected_hospital.name }}{% endif %}</span></h4>
+                        <div id="doctorCardsContainer">
+                            {% for doctor in hospital_doctors %}
+                            <div class="doctor-card-wrapper">
+                                <div class="doctor-card" onclick="selectDoctorFromCard('{{ doctor.id }}', '{{ doctor.title }} {{ doctor.first_name }} {{ doctor.last_name }}', '{{ doctor.hospital.id }}', '{{ doctor.hospital.name }}')">
+                                    <div class="doctor-image">
+                                        {% if doctor.profile_image %}
+                                            <img src="{{ doctor.profile_image.url }}" alt="{{ doctor.title }} {{ doctor.first_name }} {{ doctor.last_name }}"
+                                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                            <div class="doctor-initials" style="display: none;">
+                                                {{ doctor.first_name.0 }}{{ doctor.last_name.0 }}
+                                            </div>
+                                        {% else %}
+                                            <div class="doctor-initials">
+                                                {{ doctor.first_name.0 }}{{ doctor.last_name.0 }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="doctor-info">
+                                        <h6>{{ doctor.title }} {{ doctor.first_name }} {{ doctor.last_name }}</h6>
+                                        <p class="doctor-specialty">{{ doctor.category.name|default:"General Medicine" }}</p>
+                                        <p class="doctor-experience">{{ doctor.experience_years|default:"5" }} years experience</p>
+                                        {% if doctor.consultation_fee %}
+                                        <p class="doctor-fee">₹{{ doctor.consultation_fee }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="alert alert-info mt-3" id="doctorTipAlert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Tip:</strong> Click on a doctor card above to select them, or use the dropdown menu.
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4 class="section-title"><i class="fas fa-calendar-alt me-2"></i>Appointment Details</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Appointment Date <span class="text-danger">*</span></label>
+                                <input type="date" name="date" class="form-control" required min="{{ today }}">
+                                <div class="form-text">Select your preferred appointment date</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Appointment Time <span class="text-danger">*</span></label>
+                                <input type="time" name="time" class="form-control" required>
+                                <div class="form-text">Select your preferred time slot</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4 class="section-title"><i class="fas fa-user me-2"></i>Patient Information</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">First Name <span class="text-danger">*</span></label>
+                                <input type="text" name="first_name" class="form-control" required
+                                       value="{% if user.is_authenticated %}{{ user.first_name }}{% endif %}"
+                                       placeholder="Enter your first name"
+                                       pattern="^[A-Za-z\s]+$"
+                                       title="Only letters and spaces allowed">
+                                <div class="invalid-feedback">Please enter a valid first name (letters only)</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                                <input type="text" name="last_name" class="form-control" required
+                                       value="{% if user.is_authenticated %}{{ user.last_name }}{% endif %}"
+                                       placeholder="Enter your last name"
+                                       pattern="^[A-Za-z\s]+$"
+                                       title="Only letters and spaces allowed">
+                                <div class="invalid-feedback">Please enter a valid last name (letters only)</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" name="email" class="form-control" required
+                                       value="{% if user.is_authenticated %}{{ user.email }}{% endif %}"
+                                       placeholder="Enter your email address">
+                                <div class="invalid-feedback">Please enter a valid email address</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                <input type="tel" name="phone" class="form-control" required
+                                       placeholder="Enter your 10-digit phone number"
+                                       maxlength="10"
+                                       pattern="[6-9][0-9]{9}"
+                                       title="Enter a valid 10-digit Indian mobile number starting with 6, 7, 8, or 9">
+                                <div class="form-text">Enter a valid 10-digit mobile number</div>
+                                <div class="invalid-feedback">Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Date of Birth <span class="text-danger">*</span></label>
+                                <input type="date" name="date_of_birth" class="form-control" required max="{{ today }}">
+                                <div class="form-text">Required for medical records</div>
+                                <div class="invalid-feedback">Please enter a valid date of birth</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Gender <span class="text-danger">*</span></label>
+                                <select name="gender" class="form-select" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <div class="invalid-feedback">Please select your gender</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">ZIP Code <span class="text-danger">*</span></label>
+                                <input type="text" name="zipcode" class="form-control" required
+                                       placeholder="Enter your 6-digit ZIP code"
+                                       maxlength="6"
+                                       pattern="[1-9][0-9]{5}"
+                                       title="Enter a valid 6-digit Indian pincode (cannot start with 0)">
+                                <div class="form-text">Enter a valid 6-digit Indian pincode</div>
+                                <div class="invalid-feedback">Please enter a valid 6-digit pincode (cannot start with 0)</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Address</label>
+                                <textarea name="address" class="form-control" rows="3"
+                                             placeholder="Enter your full address (optional)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4 class="section-title"><i class="fas fa-notes-medical me-2"></i>Visit Information</h4>
+                        <div class="mb-3">
+                            <label class="form-label">Reason for Visit</label>
+                            <textarea name="reason" class="form-control" rows="4"
+                                         placeholder="Brief description of your concern or reason for the visit"></textarea>
+                            <div class="form-text">Help the doctor prepare for your visit</div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            <i class="fas fa-calendar-check me-2"></i>Book Appointment
+                        </button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="text-muted">
+                        Need help choosing a doctor?
+                        <a href="/chatbot/" class="text-primary text-decoration-none">
+                            <i class="fas fa-robot me-1"></i>Ask our AI Chatbot
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/form-validation.js' %}"></script>
+<script>
+    function loadDoctorsByHospital() {
+        const hospitalSelect = document.getElementById('hospitalSelect');
+        const doctorSelect = document.getElementById('doctorSelect');
+        const doctorCardsSection = document.getElementById('doctorCardsSection');
+        const doctorCardsContainer = document.getElementById('doctorCardsContainer');
+        const hospitalNameDisplay = document.getElementById('hospitalNameDisplay');
+        const hospitalId = hospitalSelect.value;
+
+        if (!hospitalId) {
+            doctorSelect.innerHTML = '<option value="">Select Doctor</option>';
+            doctorCardsSection.style.display = 'none';
+            return;
+        }
+
+        const hospitalName = hospitalSelect.options[hospitalSelect.selectedIndex].text;
+
+        doctorSelect.innerHTML = '<option value="">Loading doctors...</option>';
+        doctorCardsContainer.innerHTML = `
+            <div class="col-12 text-center py-4">
+                <div class="loading-spinner mb-3"></div>
+                <h5 class="text-muted">Loading doctors...</h5>
+                <p class="text-muted mb-0">Please wait while we fetch available doctors</p>
+            </div>
+        `;
+        doctorCardsSection.style.display = 'block';
+        hospitalNameDisplay.textContent = `at ${hospitalName}`;
+
+        fetch('/get-doctors-by-hospital/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: `hospital_id=${hospitalId}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            doctorSelect.innerHTML = '<option value="">Select Doctor</option>';
+
+            if (data.doctors && data.doctors.length > 0) {
+                data.doctors.forEach(doctor => {
+                    const option = document.createElement('option');
+                    option.value = doctor.id;
+                    option.textContent = `${doctor.name} - ${doctor.specialty || 'General Medicine'}`;
+                    option.setAttribute('data-hospital', hospitalId);
+                    doctorSelect.appendChild(option);
+                });
+
+                let cardsHTML = '';
+                data.doctors.forEach(doctor => {
+                    const initials = doctor.name.split(' ').map(n => n.charAt(0)).join('').toUpperCase();
+                    cardsHTML += `
+                        <div class="doctor-card-wrapper">
+                            <div class="doctor-card" onclick="selectDoctorFromCard('${doctor.id}', '${doctor.name}', '${hospitalId}', '${hospitalName}')">
+                                <div class="doctor-image">
+                                    ${doctor.image ? 
+                                        `<img src="${doctor.image}" alt="${doctor.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                         <div class="doctor-initials" style="display: none;">${initials}</div>` :
+                                        `<div class="doctor-initials">${initials}</div>`
+                                    }
+                                </div>
+                                <div class="doctor-info">
+                                    <h6>${doctor.name}</h6>
+                                    <p class="doctor-specialty">${doctor.specialty || 'General Medicine'}</p>
+                                    <p class="doctor-experience">${doctor.experience || '5'} years experience</p>
+                                    ${doctor.fee ? `<p class="doctor-fee">₹${doctor.fee}</p>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                doctorCardsContainer.innerHTML = cardsHTML;
+
+                addHoverEffectsToCards();
+            } else {
+                doctorSelect.innerHTML = '<option value="">No doctors available</option>';
+                doctorCardsContainer.innerHTML = '<div class="col-12 text-center"><i class="fas fa-user-md fa-3x text-muted mb-3"></i><h5 class="text-muted">No doctors available</h5><p class="text-muted">This hospital currently has no available doctors.</p></div>';
+            }
+        })
+        .catch(error => {
+            console.error('Error loading doctors:', error);
+            doctorSelect.innerHTML = '<option value="">Error loading doctors</option>';
+            doctorCardsContainer.innerHTML = '<div class="col-12 text-center"><i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i><h5 class="text-danger">Error loading doctors</h5><p class="text-muted">Please try again or contact support.</p></div>';
+        });
+    }
+
+    function updateHospitalFromDoctor() {
+        const doctorSelect = document.getElementById('doctorSelect');
+        const hospitalSelect = document.getElementById('hospitalSelect');
+        const selectedOption = doctorSelect.options[doctorSelect.selectedIndex];
+
+        if (selectedOption && selectedOption.getAttribute('data-hospital')) {
+            const hospitalId = selectedOption.getAttribute('data-hospital');
+            hospitalSelect.value = hospitalId;
+        }
+    }
+
+    function addHoverEffectsToCards() {
+        const doctorCards = document.querySelectorAll('.doctor-card');
+        doctorCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                if (!this.classList.contains('selected')) {
+                    this.style.borderColor = '#3498db';
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 8px 25px rgba(52, 152, 219, 0.2)';
+                }
+            });
+
+            card.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('selected')) {
+                    this.style.borderColor = '#e2e8f0';
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                }
+            });
+        });
+    }
+
+    function selectDoctorFromCard(doctorId, doctorName, hospitalId, hospitalName) {
+        const doctorSelect = document.getElementById('doctorSelect');
+        const hospitalSelect = document.getElementById('hospitalSelect');
+
+        hospitalSelect.value = hospitalId;
+        doctorSelect.value = doctorId;
+
+        document.querySelectorAll('.doctor-card').forEach(card => {
+            card.classList.remove('selected');
+            card.style.borderColor = '#e2e8f0';
+            card.style.background = 'white';
+            card.style.transform = 'translateY(0)';
+            card.style.boxShadow = 'none';
+        });
+
+        event.currentTarget.classList.add('selected');
+        event.currentTarget.style.borderColor = '#3498db';
+        event.currentTarget.style.background = 'linear-gradient(135deg, #ebf3fd, #f0f8ff)';
+        event.currentTarget.style.transform = 'translateY(-2px)';
+        event.currentTarget.style.boxShadow = '0 8px 25px rgba(52, 152, 219, 0.25)';
+
+        const alertDiv = document.getElementById('doctorTipAlert');
+        if (alertDiv) {
+            alertDiv.innerHTML = `<i class="fas fa-check-circle me-2"></i><strong>Selected:</strong> ${doctorName} at ${hospitalName} has been selected for your appointment.`;
+            alertDiv.className = 'alert alert-success mt-3';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateInput = document.querySelector('input[name="date"]');
+        const dobInput = document.querySelector('input[name="date_of_birth"]');
+        const today = new Date().toISOString().split('T')[0];
+
+        dateInput.setAttribute('min', today);
+        dobInput.setAttribute('max', today);
+
+        addHoverEffectsToCards();
+
+        initializeFormValidation();
+    });
+
+    function initializeFormValidation() {
+        const form = document.getElementById('appointmentForm');
+        const inputs = form.querySelectorAll('input, select, textarea');
+
+        inputs.forEach(input => {
+            input.addEventListener('blur', validateField);
+            input.addEventListener('input', clearValidation);
+        });
+
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+
+            inputs.forEach(input => {
+                if (!validateField({ target: input })) {
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+                alert('Please correct the errors in the form before submitting.');
+            }
+        });
+    }
+
+    function validateField(event) {
+        const field = event.target;
+        const value = field.value.trim();
+        let isValid = true;
+
+        field.classList.remove('is-valid', 'is-invalid');
+
+        if (field.hasAttribute('required') && !value) {
+            field.classList.add('is-invalid');
+            return false;
+        }
+
+        switch (field.name) {
+            case 'first_name':
+            case 'last_name':
+                if (!/^[A-Za-z\s]+$/.test(value)) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.add('is-valid');
+                }
+                break;
+
+            case 'phone':
+                if (!/^[6-9][0-9]{9}$/.test(value)) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.add('is-valid');
+                }
+                break;
+
+            case 'zipcode':
+                if (!/^[1-9][0-9]{5}$/.test(value)) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.add('is-valid');
+                }
+                break;
+
+            case 'email':
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.add('is-valid');
+                }
+                break;
+
+            default:
+                if (value) {
+                    field.classList.add('is-valid');
+                }
+        }
+
+        return isValid;
+    }
+
+    function clearValidation(event) {
+        const field = event.target;
+        field.classList.remove('is-valid', 'is-invalid');
+    }
+</script>
+{% endblock %}

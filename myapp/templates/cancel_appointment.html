@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cancel Appointment - SymptomWise{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm" style="border-radius: 16px;">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
+                        <h2 class="text-warning mt-3 mb-2">Cancel Appointment</h2>
+                        <p class="text-muted">Are you sure you want to cancel this appointment?</p>
+                    </div>
+                    
+                    <!-- Appointment Details -->
+                    <div class="appointment-details bg-light p-4 rounded mb-4">
+                        <h5 class="mb-3"><i class="fas fa-calendar-check me-2"></i>Appointment Details</h5>
+                        
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <strong>Appointment ID:</strong> {{ appointment.appointment_id }}
+                            </div>
+                            <div class="col-12 mb-2">
+                                <strong>Doctor:</strong> {{ appointment.doctor.full_name }}
+                            </div>
+                            <div class="col-12 mb-2">
+                                <strong>Specialty:</strong> {{ appointment.doctor.category.name }}
+                            </div>
+                            <div class="col-12 mb-2">
+                                <strong>Date & Time:</strong> {{ appointment.appointment_date|date:"F d, Y" }} at {{ appointment.appointment_time|time:"g:i A" }}
+                            </div>
+                            <div class="col-12 mb-2">
+                                <strong>Hospital:</strong> {{ appointment.hospital.name }}
+                            </div>
+                            <div class="col-12">
+                                <strong>Status:</strong> 
+                                <span class="badge bg-{% if appointment.status == 'scheduled' %}warning{% elif appointment.status == 'confirmed' %}success{% else %}secondary{% endif %}">
+                                    {{ appointment.get_status_display }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Warning Message -->
+                    <div class="alert alert-warning">
+                        <h6><i class="fas fa-exclamation-triangle me-2"></i>Important Notice</h6>
+                        <ul class="mb-0">
+                            <li>Once cancelled, this appointment cannot be restored</li>
+                            <li>You may need to book a new appointment</li>
+                            <li>Please contact the hospital if you need to reschedule instead</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <form method="post" class="text-center">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger me-3">
+                            <i class="fas fa-times me-2"></i>Yes, Cancel Appointment
+                        </button>
+                        <a href="{% url 'userdashboard' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Go Back
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

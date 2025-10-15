@@ -1,0 +1,23 @@
+/* Appointment Booking */
+.appointment-form {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin: 20px 0;
+}
+
+.form-section {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.required {
+    color: var(--danger-color);
+}

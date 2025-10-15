@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Hospitals - SymptomWise{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Section -->
+    <div class="card mb-4">
+        <div class="card-body text-center">
+            <h1 class="text-primary mb-3">
+                <i class="fas fa-hospital me-2"></i>Hospitals
+            </h1>
+            <p class="text-muted mb-4">Find and connect with hospitals in your area</p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a href="{% url 'hospitals:register' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Register Your Hospital
+                </a>
+                <a href="{% url 'hospitals:login' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-sign-in-alt me-2"></i>Hospital Login
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    {% if error %}
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle me-2"></i>{{ error }}
+        </div>
+    {% endif %}
+    
+    {% if hospitals %}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-primary mb-0">
+                <i class="fas fa-list me-2"></i>Available Hospitals
+            </h2>
+            <span class="badge bg-primary fs-6">{{ hospital_count }} Found</span>
+        </div>
+        
+        <div class="row">
+            {% for hospital in hospitals %}
+                <div class="col-lg-6 mb-4">
+                    <div class="hospital-card">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h4 class="text-primary mb-0">{{ hospital.name }}</h4>
+                            <span class="badge bg-success">Active</span>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                <p class="mb-2">
+                                    <i class="fas fa-map-marker-alt text-muted me-2"></i>
+                                    <strong>Location:</strong><br>
+                                    <small class="text-muted">{{ hospital.city }}, {{ hospital.state }}</small>
+                                </p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p class="mb-2">
+                                    <i class="fas fa-phone text-muted me-2"></i>
+                                    <strong>Phone:</strong><br>
+                                    <small class="text-muted">{{ hospital.phone }}</small>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <p class="mb-3">
+                            <i class="fas fa-envelope text-muted me-2"></i>
+                            <strong>Email:</strong>
+                            <small class="text-muted">{{ hospital.email }}</small>
+                        </p>
+                        
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'hospitals:detail' hospital.id %}" class="btn btn-primary flex-fill">
+                                <i class="fas fa-eye me-2"></i>View Details
+                            </a>
+                            <a href="{% url 'appointment' %}?hospital={{ hospital.id }}" class="btn btn-outline-success">
+                                <i class="fas fa-calendar-plus me-1"></i>Book
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <div class="card">
+                <div class="card-body py-5">
+                    <i class="fas fa-hospital fa-4x text-muted mb-4"></i>
+                    <h3 class="text-muted mb-3">No hospitals found</h3>
+                    <p class="text-muted mb-4">Be the first to register your hospital and join our network!</p>
+                    <a href="{% url 'hospitals:register' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-plus me-2"></i>Register Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ doctor.full_name }} - SymptomWise{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Doctor Profile Card -->
+            <div class="card border-0 shadow-sm" style="border-radius: 16px;">
+                <div class="card-body p-5">
+                    <div class="row align-items-center">
+                        <!-- Doctor Image -->
+                        <div class="col-md-4 text-center mb-4 mb-md-0">
+                            {% if doctor.profile_image %}
+                            <img src="{{ doctor.profile_image.url }}" alt="{{ doctor.full_name }}" 
+                                class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover; border: 4px solid #e2e8f0;">
+                            {% else %}
+                            <img src="{% static 'image/d2.png' %}" alt="{{ doctor.full_name }}" 
+                                class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover; border: 4px solid #e2e8f0;">
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Doctor Info -->
+                        <div class="col-md-8">
+                            <h1 class="h2 fw-bold mb-2" style="color: #1e293b;">{{ doctor.full_name }}</h1>
+                            <p class="h5 mb-3" style="color: #2563eb;">{{ doctor.category.name|default:"General Medicine" }}</p>
+                            
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-graduation-cap me-2" style="color: #64748b;"></i>
+                                    <span style="color: #64748b;">{{ doctor.experience_years|default:"5" }} years experience</span>
+                                </div>
+                                
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-hospital me-2" style="color: #64748b;"></i>
+                                    <span style="color: #64748b;">{{ doctor.hospital.name }}</span>
+                                </div>
+                                
+                                {% if doctor.languages %}
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-language me-2" style="color: #64748b;"></i>
+                                    <span style="color: #64748b;">{{ doctor.languages }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Rating -->
+                            <div class="mb-3">
+                                {% for i in "12345" %}
+                                <i class="fas fa-star" style="color: #fbbf24;"></i>
+                                {% endfor %}
+                                <span class="ms-2" style="color: #64748b;">5.0 ({{ doctor.total_reviews|default:"12" }} reviews)</span>
+                            </div>
+                            
+                            <!-- Book Appointment Button -->
+                            <a href="{% url 'appointment' %}?doctor={{ doctor.id }}&hospital={{ doctor.hospital.id }}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-calendar-plus me-2"></i>Book Appointment
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Doctor Details -->
+            {% if doctor.bio %}
+            <div class="card border-0 shadow-sm mt-4" style="border-radius: 16px;">
+                <div class="card-body p-4">
+                    <h3 class="h4 fw-bold mb-3" style="color: #1e293b;">About Dr. {{ doctor.last_name }}</h3>
+                    <p style="color: #64748b; line-height: 1.6;">{{ doctor.bio }}</p>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if doctor.education %}
+            <div class="card border-0 shadow-sm mt-4" style="border-radius: 16px;">
+                <div class="card-body p-4">
+                    <h3 class="h4 fw-bold mb-3" style="color: #1e293b;">Education & Qualifications</h3>
+                    <p style="color: #64748b; line-height: 1.6;">{{ doctor.education }}</p>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Consultation Info -->
+            <div class="card border-0 shadow-sm mt-4" style="border-radius: 16px;">
+                <div class="card-body p-4">
+                    <h3 class="h4 fw-bold mb-3" style="color: #1e293b;">Consultation Information</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-clock me-2" style="color: #2563eb;"></i>
+                                <span style="color: #64748b;">{{ doctor.consultation_duration|default:"30" }} minutes</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-rupee-sign me-2" style="color: #2563eb;"></i>
+                                <span style="color: #64748b;">₹{{ doctor.consultation_fee|default:"500" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if doctor.get_availability_display %}
+                    <div class="mt-3">
+                        <h5 class="fw-bold mb-2" style="color: #1e293b;">Availability</h5>
+                        <p style="color: #64748b;">{{ doctor.get_availability_display }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Back Button -->
+            <div class="text-center mt-4">
+                <a href="{% url 'index' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

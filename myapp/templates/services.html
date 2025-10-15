@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Our Services - SymptomWise{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="text-primary mb-3">
+            <i class="fas fa-stethoscope me-2"></i>Our Services
+        </h1>
+        <p class="lead text-muted">Comprehensive healthcare solutions for all your medical needs</p>
+    </div>
+
+    <!-- Main Services -->
+    <div class="row mb-5">
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-calendar-plus fa-2x"></i>
+                    </div>
+                    <h4 class="text-primary mb-3">Appointment Booking</h4>
+                    <p class="text-muted mb-4">Easy online appointment scheduling with qualified doctors across multiple specialties.</p>
+                    <ul class="list-unstyled text-start">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Online booking system</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Multiple time slots</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Instant confirmation</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Reminder notifications</li>
+                    </ul>
+                    <a href="{% url 'appointment' %}" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-robot fa-2x"></i>
+                    </div>
+                    <h4 class="text-primary mb-3">SymptomWise AI</h4>
+                    <p class="text-muted mb-4">Advanced AI-powered symptom analysis and intelligent health recommendations through our smart system.</p>
+                    <ul class="list-unstyled text-start">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>24/7 availability</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Symptom analysis</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Health recommendations</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Emergency guidance</li>
+                    </ul>
+                    <a href="/chatbot/" class="btn btn-info">Try Chatbot</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-hospital fa-2x"></i>
+                    </div>
+                    <h4 class="text-primary mb-3">Hospital Network</h4>
+                    <p class="text-muted mb-4">Access to a comprehensive network of hospitals and healthcare facilities.</p>
+                    <ul class="list-unstyled text-start">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Multi-hospital access</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Location-based search</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Facility information</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Direct booking</li>
+                    </ul>
+                    <a href="/hospitals/" class="btn btn-success">Find Hospitals</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Specialties -->
+    <div class="mb-5">
+        <h2 class="text-center text-primary mb-4">Medical Specialties</h2>
+        <div class="row">
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-heart text-danger fa-2x mb-2"></i>
+                        <h6>Cardiology</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-brain text-primary fa-2x mb-2"></i>
+                        <h6>Neurology</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-bone text-warning fa-2x mb-2"></i>
+                        <h6>Orthopedics</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-eye text-info fa-2x mb-2"></i>
+                        <h6>Ophthalmology</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-baby text-success fa-2x mb-2"></i>
+                        <h6>Pediatrics</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-female text-pink fa-2x mb-2"></i>
+                        <h6>Gynecology</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-lungs text-secondary fa-2x mb-2"></i>
+                        <h6>Pulmonology</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-user-md text-dark fa-2x mb-2"></i>
+                        <h6>General Medicine</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emergency Services -->
+    <div class="bg-danger text-white rounded p-4 mb-5">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h3 class="mb-2"><i class="fas fa-ambulance me-2"></i>Emergency Services</h3>
+                <p class="mb-0">24/7 emergency medical assistance and ambulance services available.</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="tel:108" class="btn btn-light btn-lg">
+                    <i class="fas fa-phone me-2"></i>Call 108
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="text-center">
+        <h3 class="mb-3">Ready to Experience Quality Healthcare?</h3>
+        <p class="text-muted mb-4">Join our platform and get access to comprehensive medical services.</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'register' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-user-plus me-2"></i>Register Now
+            </a>
+            <a href="{% url 'appointment' %}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-calendar-plus me-2"></i>Book Appointment
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

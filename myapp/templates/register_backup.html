@@ -1,0 +1,467 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register - SymptomWise{% endblock %}
+
+{% block extra_css %}
+<style>
+    .register-container {
+        background: #ffffff;
+        min-height: calc(100vh - 76px);
+        display: flex;
+        align-items: center;
+        padding: 2rem 0;
+    }
+    
+    .register-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        overflow: hidden;
+    }
+    
+    .register-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+    }
+    
+    .register-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+        opacity: 0.3;
+    }
+    
+    .register-icon {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .register-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .register-subtitle {
+        opacity: 0.9;
+        margin-bottom: 0;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .register-form {
+        padding: 2.5rem;
+    }
+    
+    .form-floating {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-floating > .form-control {
+        height: 3.5rem;
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-floating > .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(0, 119, 182, 0.15);
+        transform: translateY(-2px);
+    }
+    
+    .form-floating > label {
+        color: #6c757d;
+        font-weight: 500;
+    }
+    
+    .input-group-text {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 12px 0 0 12px;
+        width: 50px;
+        justify-content: center;
+    }
+    
+    .input-group .form-control {
+        border-left: none;
+        border-radius: 0 12px 12px 0;
+    }
+    
+    .register-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border: none;
+        border-radius: 12px;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .register-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 119, 182, 0.3);
+    }
+    
+    .register-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+    
+    .register-btn:hover::before {
+        left: 100%;
+    }
+    
+    .password-strength {
+        height: 4px;
+        border-radius: 2px;
+        margin-top: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .strength-weak { background: #dc3545; width: 25%; }
+    .strength-fair { background: #ffc107; width: 50%; }
+    .strength-good { background: #fd7e14; width: 75%; }
+    .strength-strong { background: #28a745; width: 100%; }
+    
+    .login-link {
+        background: rgba(0, 119, 182, 0.1);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+    
+    .quick-access {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        backdrop-filter: blur(10px);
+    }
+    
+    .feature-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+    
+    .feature-item:hover {
+        background: rgba(255, 255, 255, 0.9);
+        transform: translateX(5px);
+    }
+    
+    .feature-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+    
+    @media (max-width: 768px) {
+        .register-container {
+            padding: 1rem 0;
+        }
+        
+        .register-form {
+            padding: 1.5rem;
+        }
+        
+        .register-header {
+            padding: 1.5rem;
+        }
+        
+        .register-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="register-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="register-card">
+                    <div class="row g-0">
+                        <!-- Left Side - Registration Form -->
+                        <div class="col-lg-7">
+                            <div class="register-header">
+                                <div class="register-icon">
+                                    <i class="fas fa-user-plus fa-2x"></i>
+                                </div>
+                                <h2 class="register-title">Join SymptomWise</h2>
+                                <p class="register-subtitle">Create your account for intelligent healthcare management</p>
+                            </div>
+                            
+                            <div class="register-form">
+                                <form method="post" id="registerForm" data-validate="true" class="needs-validation" novalidate>
+                                    {% csrf_token %}
+                                    
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="username" name="username" 
+                                               placeholder="Username" required
+                                               pattern="^[a-zA-Z][a-zA-Z0-9_-]*$"
+                                               title="Username must start with a letter and contain only letters, numbers, underscore, and hyphen"
+                                               minlength="3" maxlength="30">
+                                        <label for="username">
+                                            <i class="fas fa-user me-2"></i>Username
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-floating mb-3">
+                                        <input type="email" class="form-control" id="email" name="email" 
+                                               placeholder="Email Address" required>
+                                        <label for="email">
+                                            <i class="fas fa-envelope me-2"></i>Email Address
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-floating mb-3">
+                                        <input type="password" class="form-control" id="password" name="password" 
+                                               placeholder="Password" required
+                                               minlength="8"
+                                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$"
+                                               title="Password must be at least 8 characters with uppercase, lowercase, number, and special character">
+                                        <label for="password">
+                                            <i class="fas fa-lock me-2"></i>Password
+                                        </label>
+                                        <div class="password-strength" id="passwordStrength"></div>
+                                        <small class="text-muted mt-1 d-block">Password must contain uppercase, lowercase, number, and special character</small>
+                                    </div>
+                                    
+                                    <div class="form-floating mb-4">
+                                        <input type="password" class="form-control" id="confirmPassword" name="confirm_password" 
+                                               placeholder="Confirm Password" required>
+                                        <label for="confirmPassword">
+                                            <i class="fas fa-lock me-2"></i>Confirm Password
+                                        </label>
+                                        <div id="passwordMatch" class="mt-1"></div>
+                                    </div>
+                                    
+                                    <div class="form-check mb-4">
+                                        <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                                        <label class="form-check-label" for="agreeTerms">
+                                            I agree to the <a href="#" class="text-primary">Terms of Service</a> and 
+                                            <a href="#" class="text-primary">Privacy Policy</a>
+                                        </label>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn register-btn w-100 mb-3">
+                                        <i class="fas fa-user-plus me-2"></i>Create Account
+                                    </button>
+                                </form>
+                                
+                                <div class="login-link">
+                                    <p class="mb-0">
+                                        Already have an account? 
+                                        <a href="{% url 'login' %}" class="text-primary fw-bold text-decoration-none">
+                                            Sign in here
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Side - Features -->
+                        <div class="col-lg-5 d-none d-lg-block">
+                            <div class="quick-access h-100 d-flex flex-column justify-content-center">
+                                <h4 class="text-primary mb-4 text-center">
+                                    <i class="fas fa-heartbeat me-2"></i>Why Choose SymptomWise?
+                                </h4>
+                                
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-robot"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">SymptomWise AI</h6>
+                                        <small class="text-muted">Intelligent symptom analysis and health guidance</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-calendar-plus"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Easy Appointments</h6>
+                                        <small class="text-muted">Book appointments with qualified doctors instantly</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-hospital"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Hospital Network</h6>
+                                        <small class="text-muted">Access to multiple hospitals and healthcare providers</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Secure & Private</h6>
+                                        <small class="text-muted">Your health data is protected with advanced security</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">24/7 Support</h6>
+                                        <small class="text-muted">Round-the-clock healthcare assistance</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center mt-4">
+                                    <p class="text-muted mb-3">Continue as guest to explore:</p>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <a href="/chatbot/" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-robot me-1"></i>Try AI
+                                        </a>
+                                        <a href="/hospitals/" class="btn btn-outline-info btn-sm">
+                                            <i class="fas fa-hospital me-1"></i>Find Hospitals
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/form-validation.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Enhanced form validation with custom messages
+        const form = document.getElementById('registerForm');
+        const usernameField = document.getElementById('username');
+        const passwordField = document.getElementById('password');
+        const confirmPasswordField = document.getElementById('confirmPassword');
+        
+        // Custom validation messages
+        usernameField.addEventListener('invalid', function(e) {
+            if (this.validity.patternMismatch) {
+                this.setCustomValidity('Username must start with a letter and contain only letters, numbers, underscore, and hyphen');
+            } else if (this.validity.tooShort) {
+                this.setCustomValidity('Username must be at least 3 characters long');
+            } else if (this.validity.tooLong) {
+                this.setCustomValidity('Username cannot exceed 30 characters');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+        
+        passwordField.addEventListener('invalid', function(e) {
+            if (this.validity.patternMismatch) {
+                this.setCustomValidity('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character');
+            } else if (this.validity.tooShort) {
+                this.setCustomValidity('Password must be at least 8 characters long');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+        
+        // Clear custom validity on input
+        usernameField.addEventListener('input', function() {
+            this.setCustomValidity('');
+        });
+        
+        passwordField.addEventListener('input', function() {
+            this.setCustomValidity('');
+        });
+        
+        // Enhanced form submission validation
+        form.addEventListener('submit', function(e) {
+            const username = usernameField.value;
+            const password = passwordField.value;
+            const confirmPassword = confirmPasswordField.value;
+            
+            // Username validation
+            if (!/^[a-zA-Z]/.test(username)) {
+                e.preventDefault();
+                usernameField.focus();
+                alert('Username must start with a letter');
+                return false;
+            }
+            
+            if (!/^[a-zA-Z][a-zA-Z0-9_-]*$/.test(username)) {
+                e.preventDefault();
+                usernameField.focus();
+                alert('Username can only contain letters, numbers, underscore, and hyphen');
+                return false;
+            }
+            
+            // Password validation
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                confirmPasswordField.focus();
+                alert('Passwords do not match!');
+                return false;
+            }
+            
+            if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$/.test(password)) {
+                e.preventDefault();
+                passwordField.focus();
+                alert('Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character');
+                return false;
+            }
+        });
+    });
+</script>
+{% endblock %}
