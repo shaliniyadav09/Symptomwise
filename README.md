@@ -332,7 +332,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### Professional Support
 For enterprise support and custom development:
-- Email: symptomwiseprivatelimited@gmail.com | roshanshuklayt@gmail.com   
+- Email: symptomwiseprivatelimited@gmail.com | shalinisiayadav@gmail.com   
 
 
 ## 🙏 Acknowledgments
@@ -358,6 +358,5 @@ For enterprise support and custom development:
 
 ---
 
-**Made with ❤️ for better healthcare accessibility**
 
 *This project aims to bridge the gap between patients and healthcare providers through intelligent technology and seamless user experience.*
